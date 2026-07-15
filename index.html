@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muskan Agarwal — AI Engineer & Frontend Developer</title>
+<meta name="description" content="Muskan Agarwal builds production AI agent pipelines and performant Angular apps. Portfolio, open-source projects, RAG systems, and daily engineering writing.">
+<link rel="canonical" href="https://muskanagarwal.dev/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Muskan Agarwal — AI Engineer & Frontend Developer">
+<meta property="og:description" content="Production AI agent pipelines, Angular at scale, RAG systems, and daily engineering writing.">
+<meta property="og:url" content="https://muskanagarwal.dev/">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Muskan Agarwal","jobTitle":"Software Engineer",
+"url":"https://muskanagarwal.dev/","email":"mailto:hello@muskanagarwal.dev",
+"sameAs":["https://github.com/itsmuskanagarwal","https://linkedin.com/in/itsmuskanagarwal","https://medium.com/@developerwhoismean"],
+"knowsAbout":["Angular","TypeScript","AI Agents","Retrieval-Augmented Generation","Node.js"]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .hero3d{position:relative;min-height:100vh;background:var(--ink);overflow:hidden;display:flex;align-items:center;justify-content:center}
+  #bg3d{position:absolute;inset:0;z-index:1}
+  .hero-inner{position:relative;z-index:2;text-align:center;padding:0 5vw;pointer-events:none}
+  .hero-inner .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;margin-bottom:18px}
+  .hero-inner h1{color:var(--cream);font-size:clamp(2.8rem,9vw,7.5rem);mix-blend-mode:screen}
+  .hero-inner h1 .gold{color:var(--gold)}
+  .hero-inner p{color:var(--muted-l);font-weight:700;font-size:clamp(1rem,2.2vw,1.35rem);margin-top:16px}
+  .hero-cta{margin-top:36px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;pointer-events:auto}
+  .marquee{position:absolute;bottom:0;left:0;right:0;z-index:3;background:var(--gold);border-top:2px solid var(--ink);overflow:hidden;white-space:nowrap;padding:10px 0}
+  .marquee span{display:inline-block;font-family:'Archivo Black';text-transform:uppercase;font-size:.9rem;color:var(--ink);animation:slide 28s linear infinite}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  /* area cards */
+  .areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;max-width:1250px;margin:60px auto 0}
+  .area{position:relative;display:block;text-decoration:none;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:22px;box-shadow:9px 10px 0 rgba(23,23,27,.9);padding:34px 30px 30px;transition:transform .18s,box-shadow .18s;overflow:hidden}
+  .area:hover{transform:translate(3px,3px);box-shadow:5px 6px 0 rgba(23,23,27,.9)}
+  .area .idx{font-family:'Archivo Black';font-size:2.6rem;color:rgba(233,179,59,.9)}
+  .area h3{font-size:1.35rem;margin:10px 0 8px;font-family:'Archivo Black';text-transform:uppercase}
+  .area p{color:var(--muted);font-size:.95rem}
+  .area .go{position:absolute;top:26px;right:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;transition:transform .2s}
+  .area:hover .go{transform:rotate(45deg)}
+  .stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:70px}
+  .stat{text-align:center}
+  .stat .n{font-family:'Archivo Black';font-size:2.6rem;color:var(--gold)}
+  .stat .l{font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-l)}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero3d">
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">AI Engineer · Frontend Developer</div>
+    <h1 class="display">Muskan<br><span class="gold">Agarwal</span></h1>
+    <p>I build production AI agent pipelines and Angular apps that ship.</p>
+    <div class="hero-cta">
+      <a class="btn" href="/portfolio/">Explore my work</a>
+      <a class="btn ghost" href="/systems/">Watch a RAG system run →</a>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true"><span id="mq">ANGULAR · TYPESCRIPT · AI AGENTS · RAG SYSTEMS · NODE.JS · CLAUDE API · EVAL HARNESSES · OPEN SOURCE&nbsp;·&nbsp;</span></div>
+</header>
+
+<main class="section grid-paper center">
+  <span class="kicker">One site, five rooms</span>
+  <h2 class="display sec-title">Where do you want to go?</h2>
+  <div class="areas">
+    <a class="area" href="/portfolio/">
+      <span class="go">→</span><div class="idx">01</div>
+      <h3>Portfolio</h3>
+      <p>The journey — career, education, achievements, and the full tech stack. The interactive résumé.</p>
+    </a>
+    <a class="area" href="/articles/">
+      <span class="go">→</span><div class="idx">02</div>
+      <h3>Articles</h3>
+      <p>Near-daily engineering writing: AI agents, retrieval systems, Angular performance, honest build logs.</p>
+    </a>
+    <a class="area" href="/projects/#opensource">
+      <span class="go">→</span><div class="idx">03</div>
+      <h3>GitHub &amp; Open Source</h3>
+      <p>Every public repository, live from the GitHub API — stars, languages, and what each one is for.</p>
+    </a>
+    <a class="area" href="/projects/">
+      <span class="go">→</span><div class="idx">04</div>
+      <h3>Projects &amp; Products</h3>
+      <p>What I've built, what stage it's in, how you can use it today, and where each one is going next.</p>
+    </a>
+    <a class="area" href="/systems/">
+      <span class="go">→</span><div class="idx">05</div>
+      <h3>RAG Systems — Live Demo</h3>
+      <p>Watch ClauseLens answer contract questions with real recorded pipeline runs. No API key, real data.</p>
+    </a>
+    <a class="area" href="/plans/">
+      <span class="go">→</span><div class="idx">06</div>
+      <h3>What's Coming</h3>
+      <p>The build queue: products in progress, blueprints waiting their turn, and how I'm sequencing them.</p>
+    </a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">10+</div><div class="l">Public repos</div></div>
+    <div class="stat"><div class="n">90.7%</div><div class="l">ClauseLens retrieval hit-rate</div></div>
+    <div class="stat"><div class="n">206</div><div class="l">Tests in effective-agents-lab</div></div>
+    <div class="stat"><div class="n">2×</div><div class="l">Gold medalist (MCA, AI &amp; DS)</div></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span>Frontend Engineer who ships full-stack</span>
+  <span><a href="mailto:hello@muskanagarwal.dev">Email</a> · <a href="https://github.com/itsmuskanagarwal" rel="noopener">GitHub</a> · <a href="https://linkedin.com/in/itsmuskanagarwal" rel="noopener">LinkedIn</a> · <a href="https://medium.com/@developerwhoismean" rel="noopener">Medium</a></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* 3D hero: golden particle wave field, mouse parallax. Falls back to static gradient. */
+(function(){
+  const canvas=document.getElementById('bg3d');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!window.THREE||reduced){canvas.style.background='radial-gradient(circle at 70% 30%,rgba(233,179,59,.25),transparent 60%)';return}
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,1,.1,100);
+  camera.position.set(0,6,14);
+
+  /* particle wave */
+  const COLS=120,ROWS=60,SP=.45;
+  const geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(COLS*ROWS*3);
+  let i=0;
+  for(let x=0;x<COLS;x++)for(let z=0;z<ROWS;z++){
+    pos[i++]=(x-COLS/2)*SP; pos[i++]=0; pos[i++]=(z-ROWS/2)*SP;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const mat=new THREE.PointsMaterial({color:0xE9B33B,size:.06,transparent:true,opacity:.85});
+  const pts=new THREE.Points(geo,mat);
+  scene.add(pts);
+
+  /* faint second layer, cream */
+  const mat2=new THREE.PointsMaterial({color:0xFAF7F0,size:.03,transparent:true,opacity:.28});
+  const pts2=new THREE.Points(geo.clone(),mat2);
+  pts2.position.y=.6;scene.add(pts2);
+
+  /* wireframe torus knot accent drifting slowly */
+  const knot=new THREE.Mesh(
+    new THREE.TorusKnotGeometry(2.1,.5,110,14),
+    new THREE.MeshBasicMaterial({color:0xE9B33B,wireframe:true,transparent:true,opacity:.16}));
+  knot.position.set(6.5,4.2,-4);scene.add(knot);
+
+  let mx=0,my=0;
+  addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
+  function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  addEventListener('resize',resize);
+
+  const p1=geo.attributes.position,p2=pts2.geometry.attributes.position;
+  let t=0,visible=true;
+  new IntersectionObserver(es=>visible=es[0].isIntersecting).observe(canvas);
+  (function loop(){
+    requestAnimationFrame(loop);
+    if(!visible)return;
+    resize();t+=.014;
+    for(let n=0;n<p1.count;n++){
+      const x=p1.getX(n),z=p1.getZ(n);
+      const y=Math.sin(x*.55+t)*Math.cos(z*.45+t*.8)*1.15+Math.sin((x+z)*.2+t*.6)*.5;
+      p1.setY(n,y);p2.setY(n,y*.8);
+    }
+    p1.needsUpdate=true;p2.needsUpdate=true;
+    knot.rotation.x+=.0016;knot.rotation.y+=.0022;
+    camera.position.x+= (mx*3-camera.position.x)*.04;
+    camera.position.y+= (6-my*2-camera.position.y)*.04;
+    camera.lookAt(0,0,0);
+    renderer.render(scene,camera);
+  })();
+})();
+document.getElementById('mq').innerHTML+=document.getElementById('mq').innerHTML; /* seamless marquee */
+</script>
+</body>
+</html>

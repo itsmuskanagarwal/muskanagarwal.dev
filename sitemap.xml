@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://muskanagarwal.dev/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/portfolio/</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/projects/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/systems/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/articles/</loc><priority>0.8</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/articles/building-clauselens-rag/</loc><priority>0.7</priority><lastmod>2026-07-15</lastmod></url>
+  <url><loc>https://muskanagarwal.dev/plans/</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+</urlset>
