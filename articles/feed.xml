@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Muskan Agarwal — Articles</title>
+    <link>https://muskanagarwal.dev/articles/</link>
+    <description>Engineering writing by Muskan Agarwal: AI agents, RAG systems, Angular performance, and honest build logs.</description>
+    <language>en-us</language>
+    <item>
+      <title>Building ClauseLens: what 90.7% retrieval actually took</title>
+      <link>https://muskanagarwal.dev/articles/building-clauselens-rag/</link>
+      <guid>https://muskanagarwal.dev/articles/building-clauselens-rag/</guid>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Build log for ClauseLens, a hybrid-retrieval RAG pipeline for contracts: structural chunking, BM25 + dense fusion with RRF, citation validation, and the three real bugs the benchmark caught.</description>
+    </item>
+  </channel>
+</rss>
