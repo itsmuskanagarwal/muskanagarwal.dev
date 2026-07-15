@@ -162,9 +162,15 @@
 
   let mx=0,my=0;
   addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
-  function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;
-    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
-  addEventListener('resize',resize);
+  function resize(){
+    const rect=canvas.getBoundingClientRect();
+    const w=rect.width,h=rect.height;
+    if(!w||!h)return;
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()
+  }
+  resize();
+  let resizeTimer;
+  addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(resize,120)});
 
   const p1=geo.attributes.position,p2=pts2.geometry.attributes.position;
   let t=0,visible=true;
@@ -172,7 +178,7 @@
   (function loop(){
     requestAnimationFrame(loop);
     if(!visible)return;
-    resize();t+=.014;
+    t+=.014;
     for(let n=0;n<p1.count;n++){
       const x=p1.getX(n),z=p1.getZ(n);
       const y=Math.sin(x*.55+t)*Math.cos(z*.45+t*.8)*1.15+Math.sin((x+z)*.2+t*.6)*.5;
