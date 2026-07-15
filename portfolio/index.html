@@ -175,9 +175,11 @@
     .about-grid{grid-template-columns:1fr}
     .stop{padding-left:70px}
     .notebook-body{padding:26px 22px}
-    nav .links{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:68vw}
+    nav{padding:12px 4vw}
+    nav .logo{font-size:.88rem;flex-shrink:0}
+    nav .links{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:62vw;gap:12px;mask-image:linear-gradient(to right,transparent,#000 12px,#000 calc(100% - 12px),transparent);-webkit-mask-image:linear-gradient(to right,transparent,#000 12px,#000 calc(100% - 12px),transparent)}
     nav .links::-webkit-scrollbar{display:none}
-    nav .links a{font-size:.68rem;white-space:nowrap}
+    nav .links a{font-size:.68rem;white-space:nowrap;flex-shrink:0}
   }
 </style>
 </head>
