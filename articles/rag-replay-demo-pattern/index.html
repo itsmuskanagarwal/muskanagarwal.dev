@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The replay-demo pattern: show your RAG working without an API key — Muskan Agarwal</title>
+<meta name="description" content="How to demo a RAG pipeline honestly, at zero cost, with no abuse surface — by replaying real recorded runs instead of calling a model on every visitor request.">
+<link rel="canonical" href="https://muskanagarwal.dev/articles/rag-replay-demo-pattern/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The replay-demo pattern: show your RAG working without an API key">
+<meta property="og:description" content="How to demo a RAG pipeline honestly, at zero cost, with no abuse surface — by replaying real recorded runs instead of calling a model on every visitor request.">
+<meta property="og:url" content="https://muskanagarwal.dev/articles/rag-replay-demo-pattern/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"The replay-demo pattern: show your RAG working without an API key",
+"datePublished":"2026-07-15","dateModified":"2026-07-15",
+"author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
+"mainEntityOfPage":"https://muskanagarwal.dev/articles/rag-replay-demo-pattern/"}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  article{max-width:760px;margin:0 auto;text-align:left}
+  article .date{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  article h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 26px}
+  article h2{font-size:1.35rem;margin:38px 0 12px;font-family:'Archivo Black';text-transform:uppercase}
+  article p{margin-bottom:18px;font-size:1.02rem}
+  article code{background:var(--cream-2);border:1px solid rgba(23,23,27,.2);border-radius:6px;padding:1px 6px;font-size:.88em}
+  article pre{background:#101014;color:#D8D3C8;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:.84rem;line-height:1.6;margin-bottom:18px;border:2px solid rgba(233,179,59,.35)}
+  .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
+  .cta-box a{color:var(--gold);font-weight:800}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/" aria-current="page">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section grid-paper">
+<article>
+  <span class="date">July 15, 2026 · RAG · Patterns</span>
+  <h1 class="display">The replay-demo pattern: show your RAG working without an API key</h1>
+
+  <p>My RAG demo costs $0 to run and can't be abused — not because I locked it down, but because it doesn't call a model at all. The <a href="/systems/">systems page</a> for ClauseLens replays real recorded pipeline runs: the same queries that live in the benchmark golden set, the same retrieved chunks, the same latency numbers from <code>benchmark_results.json</code>. The difference between that and a fake demo is worth explaining, because they look identical from the outside.</p>
+
+  <h2>The two bad alternatives</h2>
+  <p>If you want to demo a RAG pipeline on a public website, you have two obvious options. You can wire up a live model and call it on every visitor's question, which means your API bill scales with traffic and your input field is an open prompt-injection surface. Or you can fake it: hardcode a few canned responses that look like real output but aren't actually produced by your pipeline. The first option is expensive and unsafe. The second is dishonest.</p>
+
+  <p>Neither felt right for ClauseLens. The pipeline exists as a real, runnable open-source implementation, and the whole point is that you can inspect what it does. A fake demo undermines that. But a live demo that burns API quota on every curious visitor means the demo itself becomes a liability the moment any real traffic shows up.</p>
+
+  <h2>What the replay pattern is</h2>
+  <p>The replay pattern sits between those two options. Before the demo page goes live, you run a representative set of questions through your actual pipeline and capture the full output — the retrieved chunks, the latencies, the citations, the final answer. You serialize that as JSON. Then the demo page is just JavaScript that reads that JSON and plays it back, animated to look like a live run.</p>
+
+  <p>What the systems page shows is exactly this. The honesty box on that page says it plainly: "These are recorded runs of the real clauselens-rag pipeline against its sample corpus — real queries from the benchmark golden set, real retrieved chunks, real latencies from <code>benchmark_results.json</code>. Nothing here calls a model at page-load; that's the point." The latency numbers are real because they were measured when the benchmark was actually run, not manufactured for the demo. The retrieved chunks are real because they came from the pipeline's retrieval step. The citations are real because the citation validator cleared them.</p>
+
+  <h2>Why it's still honest</h2>
+  <p>A replay demo is honest if and only if the data in it came from your actual system. The runs backing the ClauseLens demo came from the same benchmark that produced the 90.7% hit-rate figure — 43 questions against the bundled sample contracts, run with no model in the loop (the benchmark uses an extractive fallback so the retrieval numbers are reproducible regardless of what API key you have). If I had cherry-picked questions that happened to retrieve cleanly or trimmed latency numbers after the fact, the demo would be dishonest. I didn't, and you can verify that by running the benchmark yourself: <code>make bench</code> writes a fresh <code>benchmark_results.json</code> and you can compare it to what the demo shows.</p>
+
+  <p>That verifiability is what separates replay from fabrication. Anyone who clones the repo and runs it on the same sample documents should get numbers within rounding error of what's on the page.</p>
+
+  <h2>The pipeline runs without an API key anyway</h2>
+  <p>There's a second layer to this for ClauseLens specifically: the pipeline itself doesn't require an API key. The synthesis step has two paths — Claude Haiku when <code>ANTHROPIC_API_KEY</code> is set, and an extractive fallback that returns the top retrieved excerpts verbatim with citations when it isn't. The citation validator runs identically in both cases, so the retrieval guarantee is the same. This means anyone who runs the demo locally isn't dependent on an API account to see the pipeline work end-to-end.</p>
+
+  <p>That design choice wasn't primarily about the demo — it was about making the reference implementation genuinely usable as a starting point. But it's a useful consequence: the "no API key" demo isn't a crippled version of something more powerful. Retrieval and citation validation are the hard parts, and they run completely.</p>
+
+  <h2>The zero-abuse-surface benefit</h2>
+  <p>An underrated advantage of the replay pattern is that there's nothing to abuse. A live inference endpoint takes user input, passes it to a model, and returns output — which means it can be used to extract system prompts, run jailbreak attempts, or just generate large volumes of text on your API bill. A replay demo takes user input, looks it up in a JSON map, and returns the pre-recorded result. There's no inference path to exploit.</p>
+
+  <p>This matters especially early in a project, when you want people to be able to explore what you've built without you having to monitor it. The systems page has been up since ClauseLens launched. It has had zero API spend from demo traffic and no abuse incidents, because there is no inference surface to abuse.</p>
+
+  <h2>When the pattern doesn't work</h2>
+  <p>The replay pattern assumes your demo questions are fixed in advance, which is true for a benchmark-backed demo but wouldn't work for a product that lets users ask arbitrary questions. If the value proposition of your system is that it handles any question — not just a curated set — then a replay demo can't actually show that. For ClauseLens the pipeline is demonstrably general (the golden set covers paraphrases, cross-document questions, and edge cases, not just easy lookups), but the demo page only shows the questions that are in the set. That's a real limitation and I wouldn't pretend otherwise.</p>
+
+  <p>For showcasing that a retrieval system works and is reproducible, though, it's the most honest option I've found.</p>
+
+  <div class="cta-box">
+    <strong>See it running:</strong> the <a href="/systems/">systems page</a> has the demo. Clone <a href="https://github.com/itsmuskanagarwal/clauselens-rag" rel="noopener">clauselens-rag</a> and run <code>make bench</code> to reproduce the numbers yourself — no API key needed.
+  </div>
+</article>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+</body>
+</html>
