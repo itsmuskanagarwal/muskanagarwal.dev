@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Next — Roadmap | Muskan Agarwal</title>
+<meta name="description" content="Muskan Agarwal's public build queue: products in progress, RAG blueprints waiting their turn, and the sequencing logic behind them.">
+<link rel="canonical" href="https://muskanagarwal.dev/plans/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="What's Next — Muskan Agarwal's public roadmap">
+<meta property="og:description" content="Products in progress, blueprints queued, sequencing logic. Updated as things ship.">
+<meta property="og:url" content="https://muskanagarwal.dev/plans/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .queue{max-width:900px;margin:56px auto 0;text-align:left;display:flex;flex-direction:column;gap:20px}
+  .q-item{display:flex;gap:24px;align-items:flex-start}
+  .q-item .ph{font-family:'Archivo Black';color:var(--gold);font-size:1.6rem;min-width:76px;padding-top:18px}
+  .q-item .card-dark{flex:1}
+  .q-item h3{color:var(--cream);font-size:1.1rem;margin-bottom:4px}
+  .q-item .when{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .q-item p{font-size:.92rem;color:#C9C4BA}
+  .principle{max-width:900px;margin:70px auto 0;text-align:left}
+  .principle .card-dark{border-color:var(--gold)}
+</style>
+</head>
+<body class="section-dark">
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/" aria-current="page">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section dark-paper center">
+  <span class="kicker">Public build queue</span>
+  <h1 class="display sec-title">What's Coming</h1>
+  <p class="sec-sub" style="max-width:600px;margin:0 auto">Sequenced, phased, and updated as things ship. Each item stays here until you can click it.</p>
+
+  <div class="queue">
+    <div class="q-item"><div class="ph">NOW</div><div class="card-dark">
+      <div class="when">In progress</div>
+      <h3>This site — permanent home, daily writing</h3>
+      <p>Portfolio, projects, RAG demos, and articles on my own domain. Blog cadence: near-daily engineering posts. Every shipped system gets a build log.</p>
+    </div></div>
+    <div class="q-item"><div class="ph">01</div><div class="card-dark">
+      <div class="when">Next up</div>
+      <h3>review-rails v1 → GitHub Marketplace</h3>
+      <p>Tagged release, marketplace listing, dogfooded on my own repositories. PR review automation your standards can actually enforce.</p>
+    </div></div>
+    <div class="q-item"><div class="ph">02</div><div class="card-dark">
+      <div class="when">Queued</div>
+      <h3>How to Talk Corporate — live deployment</h3>
+      <p>The message-rewriter goes from "built" to "usable at a URL": managed keys, rate limiting, then a link on the projects page.</p>
+    </div></div>
+    <div class="q-item"><div class="ph">03</div><div class="card-dark">
+      <div class="when">Queued · multi-week</div>
+      <h3>ClauseLens to production spec</h3>
+      <p>Real embedding model, Postgres + pgvector, hosted rate-limited demo embedded on this site. The blueprint is written; now it gets executed phase by phase.</p>
+    </div></div>
+    <div class="q-item"><div class="ph">04</div><div class="card-dark">
+      <div class="when">Blueprint stage</div>
+      <h3>AuditLoom → LedgerScope → BidForge → AuthPilot</h3>
+      <p>Four more vertical RAG systems, fully blueprinted (architecture, costs, go-to-market). Sequenced so each build reuses ~60% of the previous one. Details on the <a href="/systems/" style="color:var(--gold)">systems page</a>.</p>
+    </div></div>
+  </div>
+
+  <div class="principle">
+    <div class="card-dark">
+      <h3 style="color:var(--gold);margin-bottom:8px">The operating principle</h3>
+      <p style="color:#C9C4BA;font-size:.95rem">Nothing gets called a product until a stranger can use it. Everything ships in phases with a testable gate per phase. Demos are labeled demos. This page is the accountability mechanism — if an item sits here too long, ask me about it.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">Get in touch</a></span>
+</footer>
+</body>
+</html>
