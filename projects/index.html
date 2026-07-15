@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects & Open Source — Muskan Agarwal</title>
+<meta name="description" content="Every project by Muskan Agarwal: what it is, who it helps, what stage it's in, and where it's going. Plus all public GitHub repositories, live.">
+<link rel="canonical" href="https://muskanagarwal.dev/projects/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Projects & Open Source — Muskan Agarwal">
+<meta property="og:description" content="AI dev tooling, RAG systems, Angular libraries — with honest status labels and roadmaps.">
+<meta property="og:url" content="https://muskanagarwal.dev/projects/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:30px;max-width:1250px;margin:56px auto 0;text-align:left}
+  .proj{display:flex;flex-direction:column;gap:12px}
+  .stagebar{display:flex;align-items:center;gap:10px}
+  .stage-pill{font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1.5px solid var(--ink)}
+  .stage-pill.shipped{background:#8FCE9B}
+  .stage-pill.beta{background:var(--gold)}
+  .stage-pill.wip{background:var(--cream-2)}
+  .proj h3{font-size:1.3rem}
+  .proj .row{display:grid;grid-template-columns:96px 1fr;gap:8px;font-size:.9rem}
+  .proj .row b{color:var(--gold-deep);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding-top:2px}
+  .proj .links{display:flex;gap:14px;margin-top:6px}
+  .proj .links a{font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--gold)}
+  .repo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;max-width:1250px;margin:56px auto 0;text-align:left}
+  .repo{background:var(--ink-2);border:2px solid rgba(233,179,59,.4);border-radius:var(--radius);padding:22px 24px;text-decoration:none;color:var(--cream);display:flex;flex-direction:column;gap:9px;transition:transform .18s,border-color .18s}
+  .repo:hover{transform:translateY(-5px);border-color:var(--gold)}
+  .repo h3{font-size:1.02rem;color:var(--gold)}
+  .repo p{font-size:.88rem;color:#C9C4BA;flex:1}
+  .repo .meta{display:flex;gap:16px;font-size:.76rem;font-weight:700;color:var(--muted-l)}
+  .repo .meta .lang::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:6px}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/" aria-current="page">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main>
+<section class="section grid-paper center">
+  <span class="kicker">Honest status labels</span>
+  <h1 class="display sec-title">Projects &amp; Products</h1>
+  <p class="sec-sub" style="max-width:620px;margin:0 auto">What each thing is, who it helps, exactly what stage it's in, and where it goes next. No "production grade" claims without a link to prove it.</p>
+  <div class="proj-grid" id="projGrid"></div>
+</section>
+
+<section class="section section-dark dark-paper center" id="opensource">
+  <span class="kicker">GitHub</span>
+  <h2 class="display sec-title">All Public Repositories</h2>
+  <p class="sec-sub">Fetched live from the GitHub API</p>
+  <div class="repo-grid" id="repoGrid"></div>
+  <div style="margin-top:44px"><a class="btn" href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">Profile on GitHub →</a></div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/">Home</a> · <a href="/systems/">RAG demo</a> · <a href="/plans/">What's next</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+
+<script>
+const PROJECTS=[
+ {name:"review-rails",stage:["beta","Beta — v1 imminent"],
+  what:"PR review automation for GitHub Actions: your team's standards become executable rules; an LLM is consulted only where regex can't judge.",
+  who:"Engineering teams whose review standards live in a wiki nobody reads. Enterprises that can't send code to review SaaS.",
+  next:"v1 tag, GitHub Marketplace listing, dogfooding on all my own repos.",
+  repo:"https://github.com/itsmuskanagarwal/review-rails"},
+ {name:"clauselens-rag",stage:["shipped","Reference build · open source"],
+  what:"Hybrid-retrieval RAG for contract intelligence: structural chunking, BM25 + dense fusion, citation-validated answers. 90.7% retrieval on a 43-question golden set.",
+  who:"Anyone building retrieval over legal or structured documents; teams who want a RAG pipeline without agent-framework overhead.",
+  next:"Production build per blueprint: real embeddings, pgvector, hosted rate-limited demo.",
+  repo:"https://github.com/itsmuskanagarwal/clauselens-rag",demo:"/systems/"},
+ {name:"effective-agents-lab",stage:["shipped","Complete · learning resource"],
+  what:"Anthropic's 'Building Effective AI Agents' playbook implemented end to end: 13 pattern modules, an eval harness, a 13-chapter guide. 206 offline tests.",
+  who:"Engineers learning agent patterns who want runnable code behind every concept, not slideware.",
+  next:"Keep synced with new Claude SDK releases; add cost-benchmark chapters.",
+  repo:"https://github.com/itsmuskanagarwal/effective-agents-lab"},
+ {name:"memory-matrix",stage:["shipped","Complete · Claude skill"],
+  what:"A Claude skill that scans legacy codebases into durable frontend/backend/security/database inventories — markdown for humans, JSON for tooling — with file:line evidence.",
+  who:"Teams onboarding onto large legacy systems; anyone tired of re-explaining a codebase to every new AI session.",
+  next:"Community feedback round, then a v2 with incremental re-scan.",
+  repo:"https://github.com/itsmuskanagarwal/memory-matrix"},
+ {name:"ng-reaper",stage:["beta","Usable · hardening"],
+  what:"Finds provably dead code in Angular apps — components, templates, services, pipes, NgRx — and deletes the safe parts automatically.",
+  who:"Teams with years-old Angular codebases carrying dead weight through every build and every onboarding.",
+  next:"Wider fixture coverage, npx one-shot mode polish.",
+  repo:"https://github.com/itsmuskanagarwal/ng-reaper"},
+ {name:"agent-pipe",stage:["beta","Usable · API stabilizing"],
+  what:"A small, typed, composable pipeline library for multi-step LLM workflows in TypeScript. No framework, no magic — just typed steps.",
+  who:"TypeScript developers who want LLM workflow structure without adopting a heavyweight agent framework.",
+  next:"v1 API freeze, docs site, npm publish.",
+  repo:"https://github.com/itsmuskanagarwal/agent-pipe"},
+ {name:"ng-perf-lens",stage:["wip","v0.1 — spike passed"],
+  what:"Chrome DevTools extension + npm agent making Angular change-detection cost visible per component, per cycle, live.",
+  who:"Angular teams fighting change-detection storms in data-heavy dashboards.",
+  next:"Resolve the overhead-measurement methodology gap (documented in SPIKE-RESULTS), then MVP UI.",
+  repo:"https://github.com/itsmuskanagarwal/ng-perf-lens"},
+ {name:"How to Talk Corporate",stage:["wip","Built · deployment pending"],
+  what:"AI workplace-communication assistant: rewrites Slack/email/Jira messages with the right tone. Web app + browser extension, PII stripping, per-IP rate limits.",
+  who:"Professionals who rewrite the same awkward message five times before sending it.",
+  next:"Live deployment with managed keys, then link here — not calling it 'production' until you can click it.",
+  repo:"https://github.com/itsmuskanagarwal/professional-message-rewriter"}
+];
+const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+const pg=document.getElementById('projGrid');
+PROJECTS.forEach(p=>{
+  pg.appendChild(el(`<div class="card proj">
+    <div class="stagebar"><span class="stage-pill ${p.stage[0]}">${p.stage[1]}</span></div>
+    <h3>${p.name}</h3>
+    <div class="row"><b>What</b><span>${p.what}</span></div>
+    <div class="row"><b>For whom</b><span>${p.who}</span></div>
+    <div class="row"><b>Next</b><span>${p.next}</span></div>
+    <div class="links"><a href="${p.repo}" rel="noopener" target="_blank">Repository →</a>${p.demo?`<a href="${p.demo}">Live demo →</a>`:''}</div>
+  </div>`));
+});
+/* live repos */
+const rg=document.getElementById('repoGrid');
+const CURATED=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","caveman-but-local","caveman-mcp"];
+function card(n,d,l,s,u){return el(`<a class="repo" href="${u}" rel="noopener" target="_blank"><h3>▣ ${n}</h3><p>${d||''}</p><div class="meta">${l?`<span class="lang">${l}</span>`:''}<span>★ ${s??0}</span></div></a>`)}
+fetch('https://api.github.com/users/itsmuskanagarwal/repos?per_page=100&sort=pushed')
+ .then(r=>{if(!r.ok)throw 0;return r.json()})
+ .then(rs=>{const by=Object.fromEntries(rs.map(r=>[r.name,r]));
+   CURATED.forEach(n=>{const r=by[n];if(r)rg.appendChild(card(r.name,r.description,r.language,r.stargazers_count,r.html_url))});
+   if(!rg.children.length)throw 0})
+ .catch(()=>CURATED.forEach(n=>rg.appendChild(card(n,'View on GitHub',null,null,`https://github.com/itsmuskanagarwal/${n}`))));
+</script>
+</body>
+</html>
