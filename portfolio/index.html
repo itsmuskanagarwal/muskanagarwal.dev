@@ -465,7 +465,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.c
 document.querySelectorAll('.stop,.reveal').forEach(s=>io.observe(s));
 
 /* profile photo: drop assets/profile.jpg + assets/about.jpg into the repo and these swap in automatically */
-[['avatar','assets/profile.jpg'],['aboutPhoto','assets/about.jpg']].forEach(([id,src])=>{
+[['avatar','/assets/profile.jpg'],['aboutPhoto','/assets/about.jpg']].forEach(([id,src])=>{
   const img=new Image();img.onload=()=>{const d=document.getElementById(id);d.innerHTML='';d.style.background=`center/cover url('${src}')`};img.src=src;
 });
 </script>
