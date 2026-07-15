@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Systems — Live ClauseLens Demo | Muskan Agarwal</title>
+<meta name="description" content="Watch ClauseLens, a hybrid-retrieval contract-intelligence RAG pipeline, answer real questions with clause-level citations. Recorded pipeline runs, real data, 90.7% retrieval hit-rate.">
+<link rel="canonical" href="https://muskanagarwal.dev/systems/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAG Systems — Live ClauseLens Demo">
+<meta property="og:description" content="Real recorded runs of a hybrid-retrieval RAG pipeline: query, retrieval, citations, answer.">
+<meta property="og:url" content="https://muskanagarwal.dev/systems/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"ClauseLens RAG",
+"codeRepository":"https://github.com/itsmuskanagarwal/clauselens-rag","programmingLanguage":"Python",
+"author":{"@type":"Person","name":"Muskan Agarwal"},
+"description":"Local-first hybrid-retrieval RAG pipeline for contract intelligence with citation-validated synthesis."}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .demo-wrap{max-width:1050px;margin:56px auto 0;text-align:left}
+  .term{background:#101014;border:2px solid rgba(233,179,59,.5);border-radius:18px;overflow:hidden;box-shadow:10px 12px 0 rgba(0,0,0,.5)}
+  .term-top{display:flex;align-items:center;gap:8px;background:#1B1B21;padding:12px 18px;border-bottom:1.5px solid rgba(233,179,59,.3)}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .term-top .t{margin-left:10px;color:var(--muted-l);font-size:.78rem;font-weight:700;letter-spacing:.08em}
+  .term-body{padding:26px 28px;min-height:430px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem;line-height:1.75;color:#D8D3C8}
+  .qline{color:var(--gold);font-weight:700}
+  .stage{color:#7FB4E8}
+  .hitline{color:#8FCE9B}
+  .cite{display:inline-block;background:rgba(233,179,59,.15);border:1px solid rgba(233,179,59,.5);color:var(--gold);border-radius:6px;padding:1px 8px;font-size:.76rem;margin:2px 3px}
+  .chunkbox{background:#181820;border-left:3px solid var(--gold);padding:10px 14px;margin:8px 0;color:#B9B4A9;white-space:pre-wrap;border-radius:0 8px 8px 0}
+  .ansbox{background:rgba(143,206,155,.08);border:1.5px solid rgba(143,206,155,.4);border-radius:10px;padding:12px 16px;margin-top:10px;color:#CFE8D4}
+  .caret{display:inline-block;width:9px;height:17px;background:var(--gold);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .demo-controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;justify-content:center}
+  .qbtn{background:var(--ink-2);border:2px solid rgba(233,179,59,.45);color:var(--cream);border-radius:999px;padding:10px 18px;font-weight:700;font-size:.82rem;cursor:pointer;transition:border-color .15s,transform .15s;font-family:'Manrope'}
+  .qbtn:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .qbtn.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .honesty{max-width:1050px;margin:26px auto 0;text-align:left;background:rgba(233,179,59,.07);border:1.5px solid rgba(233,179,59,.35);border-radius:14px;padding:18px 22px;color:var(--muted-l);font-size:.88rem}
+  .honesty b{color:var(--gold)}
+  .archi{max-width:1050px;margin:60px auto 0}
+  .archi pre{background:#101014;border:2px solid rgba(233,179,59,.35);border-radius:14px;padding:22px;color:#C9C4BA;font-size:.8rem;overflow-x:auto;line-height:1.6}
+  .bp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:24px;max-width:1200px;margin:56px auto 0;text-align:left}
+  .metric-row{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+  .metric{text-align:center}
+  .metric .n{font-family:'Archivo Black';font-size:2rem;color:var(--gold)}
+  .metric .l{font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-l)}
+</style>
+</head>
+<body class="section-dark">
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/" aria-current="page">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section dark-paper center">
+  <span class="kicker">Live replay · Real data</span>
+  <h1 class="display sec-title">Watch ClauseLens Run</h1>
+  <p class="sec-sub" style="max-width:640px;margin:0 auto">A hybrid-retrieval RAG pipeline for contract intelligence: structural chunking, BM25 + dense fusion, citation-validated answers. Pick a question — this replays a real recorded run of the open-source pipeline.</p>
+
+  <div class="demo-wrap">
+    <div class="term" role="region" aria-label="ClauseLens pipeline demo">
+      <div class="term-top">
+        <span class="dot" style="background:#E5604C"></span><span class="dot" style="background:#E9B33B"></span><span class="dot" style="background:#8FCE9B"></span>
+        <span class="t">clauselens · pipeline replay · corpus: 3 contracts / 24 chunks</span>
+      </div>
+      <div class="term-body" id="termBody" aria-live="polite"></div>
+    </div>
+    <div class="demo-controls" id="qButtons"></div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric"><div class="n">90.7%</div><div class="l">hit-rate @8 · 43-question golden set</div></div>
+    <div class="metric"><div class="n">1.5ms</div><div class="l">mean retrieval latency</div></div>
+    <div class="metric"><div class="n">100%</div><div class="l">answers carry citations</div></div>
+    <div class="metric"><div class="n">0</div><div class="l">API keys needed for this demo</div></div>
+  </div>
+
+  <div class="honesty">
+    <b>What you're watching, honestly:</b> these are recorded runs of the real
+    <a href="https://github.com/itsmuskanagarwal/clauselens-rag" rel="noopener" style="color:var(--gold)">clauselens-rag</a> pipeline against its sample corpus —
+    real queries from the benchmark golden set, real retrieved chunks, real latencies from <code>benchmark_results.json</code>.
+    Nothing here calls a model at page-load; that's the point. Clone the repo and run the same pipeline locally with or without an API key.
+  </div>
+
+  <section class="archi center">
+    <span class="kicker">Under the hood</span>
+    <h2 class="display sec-title" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">The pipeline</h2>
+    <pre aria-label="Architecture diagram">
+ contracts (.txt/.pdf) ──▶ structural chunker ──▶ ┌────────────────────┐
+                                                   │  BM25 index         │
+                                                   │  dense vectors      │──▶ Reciprocal-Rank Fusion ──▶ top-k chunks
+                                                   └────────────────────┘              │
+        query ──▶ query rewriting ──▶ hybrid retrieval ────────────────────────────────┘
+                                                                                        ▼
+                                       citation validator ◀── synthesis (Claude / extractive fallback)
+                                                │
+                                                ▼
+                                 answer + clause-level citations  (rejected if citations don't verify)</pre>
+  </section>
+
+  <section class="center" style="margin-top:80px">
+    <span class="kicker">The Blueprint Portfolio</span>
+    <h2 class="display sec-title" style="font-size:clamp(1.8rem,4vw,2.8rem)">Five verticals, one architecture</h2>
+    <p class="sec-sub">Each fully specified: architecture, costs, pricing, go-to-market. ClauseLens is built; the rest are queued.</p>
+    <div class="bp-grid" id="bpGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a></span>
+  <span><a href="https://github.com/itsmuskanagarwal/clauselens-rag" rel="noopener">clauselens-rag on GitHub</a></span>
+</footer>
+
+<script>
+/* ---- Real recorded runs from clauselens-rag/benchmark_results.json ---- */
+const RUNS=[
+ {q:"Does the MSA auto-renew?",ms:2.63,doc:"msa_acme.txt §2.2",
+  chunk:"This Agreement automatically renews for successive 12-month terms unless either\nparty provides written notice of non-renewal at least 60 days before the end of\nthe then-current term.",
+  ans:"Yes. The MSA automatically renews for successive 12-month terms unless either party gives written notice of non-renewal at least 60 days before the end of the then-current term."},
+ {q:"How many days notice to terminate the MSA for convenience?",ms:1.52,doc:"msa_acme.txt §3.1",
+  chunk:"Customer may terminate this Agreement for convenience upon 30 days written notice.\nVendor may not terminate for convenience during the initial term.",
+  ans:"30 days written notice — but only the Customer holds that right. The Vendor may not terminate for convenience during the initial term."},
+ {q:"What is the liability cap in the MSA?",ms:1.43,doc:"msa_acme.txt §4.1",
+  chunk:"Except for breaches of confidentiality or indemnification obligations, each party's\ntotal liability under this Agreement shall not exceed the fees paid in the 12 months\npreceding the claim.",
+  ans:"Liability is capped at fees paid in the 12 months preceding the claim — with carve-outs: confidentiality and indemnification breaches are not capped."},
+ {q:"What state law governs the MSA?",ms:1.34,doc:"msa_acme.txt §6.1",
+  chunk:"This Agreement is governed by the laws of the State of Delaware, without regard to\nconflict of law principles.",
+  ans:"Delaware law governs, expressly excluding conflict-of-law principles."},
+ {q:"How long do confidentiality obligations survive?",ms:1.30,doc:"msa_acme.txt §8.1",
+  chunk:"Confidentiality obligations survive termination of this Agreement for 36 months.",
+  ans:"Confidentiality obligations survive for 36 months after the MSA terminates. Note: the NDA with Beta Corp uses 60 months — a cross-document inconsistency ClauseLens flags."},
+ {q:"What is the fixed fee in the Q3 Statement of Work?",ms:1.48,doc:"sow_acme_q3.txt §3.1",
+  chunk:"Customer shall pay Vendor a fixed fee of $120,000, invoiced monthly at $40,000.",
+  ans:"The Q3 SOW fixed fee is $120,000, invoiced monthly at $40,000."},
+ {q:"Which agreement does the Q3 SOW fall under?",ms:1.51,doc:"sow_acme_q3.txt §4.1",
+  chunk:"All terms of the Master Services Agreement, including the liability cap in Section\n4.1 and the termination provisions in Section 3, apply to this Statement of Work\nunless expressly modified herein. No modifications to those terms are made here.",
+  ans:"The Q3 SOW is entered under the MSA dated March 1, 2024 and incorporates all MSA terms by reference — including the §4.1 liability cap and §3 termination provisions, unmodified."},
+ {q:"What law governs the NDA?",ms:1.53,doc:"nda_beta.txt §5.1",
+  chunk:"This Agreement is governed by the laws of the State of California.",
+  ans:"The NDA between Beta Corp and Customer is governed by California law — unlike the MSA, which is governed by Delaware law."}
+];
+const BLUEPRINTS=[
+ ["ClauseLens","Legal Ops","Post-signature contract intelligence: renewal & obligation answers with clause-level citations.","Reference build ✓ open source","https://github.com/itsmuskanagarwal/clauselens-rag"],
+ ["AuditLoom","Compliance","Evidence-to-control reasoning for SOC 2 / ISO 27001 — answers auditors, finds gaps first.","Blueprint · queued",null],
+ ["BidForge","Sales / GRC","RFP & security-questionnaire first-draft engine with freshness-scored answer library.","Blueprint · queued",null],
+ ["AuthPilot","Healthcare Ops","Crawled payer-policy corpus: prior-auth requirements, checklists, change alerts.","Blueprint · queued",null],
+ ["LedgerScope","Financial","Filings + transcripts + credit-agreement intelligence with covenant extraction.","Blueprint · queued",null]
+];
+
+const bpg=document.getElementById('bpGrid');
+BLUEPRINTS.forEach(([n,v,d,s,url])=>{
+  const div=document.createElement('div');div.className='card-dark';
+  div.innerHTML=`<div style="font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${s}</div>
+  <h3 style="margin:8px 0 2px;font-size:1.15rem">${n}</h3>
+  <div style="color:var(--gold-deep);font-weight:800;font-size:.82rem;margin-bottom:8px">${v}</div>
+  <p style="font-size:.9rem;color:#C9C4BA">${d}</p>
+  ${url?`<a href="${url}" rel="noopener" style="color:var(--gold);font-weight:800;font-size:.8rem;text-transform:uppercase">Repository →</a>`:''}`;
+  bpg.appendChild(div);
+});
+
+/* ---- replay engine ---- */
+const body=document.getElementById('termBody'),btns=document.getElementById('qButtons');
+let playing=false;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+async function typeInto(elm,text,speed=14){
+  for(const ch of text){elm.textContent+=ch;await sleep(speed)}
+}
+async function play(run,btn){
+  if(playing)return;playing=true;
+  document.querySelectorAll('.qbtn').forEach(b=>b.classList.remove('active'));
+  btn&&btn.classList.add('active');
+  body.innerHTML='';
+  const q=document.createElement('div');q.className='qline';body.appendChild(q);
+  q.textContent='❯ query: ';await typeInto(q,run.q,22);
+  await sleep(250);
+  const s1=document.createElement('div');s1.className='stage';body.appendChild(s1);
+  await typeInto(s1,'  → rewriting query · expanding legal aliases',6);
+  const s2=document.createElement('div');s2.className='stage';body.appendChild(s2);
+  await typeInto(s2,'  → hybrid retrieval: BM25 + dense · reciprocal-rank fusion',6);
+  await sleep(300);
+  const hit=document.createElement('div');hit.className='hitline';body.appendChild(hit);
+  hit.textContent=`  ✓ top chunk retrieved in ${run.ms}ms `;
+  const cite=document.createElement('span');cite.className='cite';cite.textContent=run.doc;hit.appendChild(cite);
+  const box=document.createElement('div');box.className='chunkbox';body.appendChild(box);
+  await typeInto(box,run.chunk,4);
+  await sleep(280);
+  const s3=document.createElement('div');s3.className='stage';body.appendChild(s3);
+  await typeInto(s3,'  → synthesis + citation validation (every claim must verify against a chunk)',6);
+  const ans=document.createElement('div');ans.className='ansbox';body.appendChild(ans);
+  const strong=document.createElement('div');strong.textContent='ANSWER';strong.style.cssText='font-size:.68rem;letter-spacing:.2em;color:#8FCE9B;font-weight:800;margin-bottom:4px';
+  ans.appendChild(strong);
+  const at=document.createElement('div');ans.appendChild(at);
+  await typeInto(at,run.ans,12);
+  const c2=document.createElement('div');c2.style.marginTop='8px';
+  c2.innerHTML=`<span class="cite">source: ${esc(run.doc)}</span> <span class="cite">citation ✓ validated</span>`;
+  ans.appendChild(c2);
+  const caret=document.createElement('span');caret.className='caret';body.appendChild(caret);
+  playing=false;
+}
+RUNS.forEach((r,i)=>{
+  const b=document.createElement('button');b.className='qbtn';b.textContent=r.q;
+  b.onclick=()=>play(r,b);btns.appendChild(b);
+});
+play(RUNS[0],btns.children[0]);
+</script>
+</body>
+</html>
