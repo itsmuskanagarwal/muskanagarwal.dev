@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building ClauseLens: what 90.7% retrieval actually took — Muskan Agarwal</title>
+<meta name="description" content="Build log for ClauseLens, a hybrid-retrieval RAG pipeline for contracts: structural chunking, BM25 + dense fusion with RRF, citation validation, and the three real bugs the benchmark caught.">
+<link rel="canonical" href="https://muskanagarwal.dev/articles/building-clauselens-rag/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building ClauseLens: what 90.7% retrieval actually took">
+<meta property="og:description" content="An honest RAG build log: hybrid retrieval, citation validation, and three real bugs.">
+<meta property="og:url" content="https://muskanagarwal.dev/articles/building-clauselens-rag/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"Building ClauseLens: what 90.7% retrieval actually took",
+"datePublished":"2026-07-15","dateModified":"2026-07-15",
+"author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
+"mainEntityOfPage":"https://muskanagarwal.dev/articles/building-clauselens-rag/"}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  article{max-width:760px;margin:0 auto;text-align:left}
+  article .date{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  article h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 26px}
+  article h2{font-size:1.35rem;margin:38px 0 12px;font-family:'Archivo Black';text-transform:uppercase}
+  article p{margin-bottom:18px;font-size:1.02rem}
+  article code{background:var(--cream-2);border:1px solid rgba(23,23,27,.2);border-radius:6px;padding:1px 6px;font-size:.88em}
+  article pre{background:#101014;color:#D8D3C8;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:.84rem;line-height:1.6;margin-bottom:18px;border:2px solid rgba(233,179,59,.35)}
+  .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
+  .cta-box a{color:var(--gold);font-weight:800}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/" aria-current="page">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section grid-paper">
+<article>
+  <span class="date">July 15, 2026 · RAG · Build log</span>
+  <h1 class="display">Building ClauseLens: what 90.7% retrieval actually took</h1>
+
+  <p>ClauseLens is a contract-intelligence RAG pipeline: you point it at a repository of agreements, ask "does the MSA auto-renew?", and get an answer with clause-level citations that are validated in code before the answer is allowed out. The <a href="https://github.com/itsmuskanagarwal/clauselens-rag">reference implementation</a> runs entirely locally — no cloud account, no API key required — and scores 90.7% hit-rate@8 on a 43-question golden set. You can watch recorded runs of it on the <a href="/systems/">systems page</a>.</p>
+
+  <p>This post is the honest version of how it got there, including the three bugs the benchmark caught that I would not have found by eyeballing outputs.</p>
+
+  <h2>Architecture in one paragraph</h2>
+  <p>Documents go through a <em>structural</em> chunker that respects section boundaries instead of splitting every N characters. Retrieval is hybrid: BM25 and dense vectors run in parallel, and their rankings merge via Reciprocal Rank Fusion. Queries get rewritten first (legal synonyms, clause aliases). Synthesis is deliberately boring — Claude Haiku when a key is present, an extractive fallback when not — because the interesting guarantee lives after synthesis: a citation validator that verifies every cited span actually exists in a retrieved chunk, and rejects the answer if it doesn't. Trust in RAG is a code problem, not a prompt problem.</p>
+
+  <h2>Bug #1: the chunker was eating preambles</h2>
+  <p>Early hit-rate was stuck in the low 80s. The golden set showed misses clustering on questions like "when was this agreement entered into?" — anything answered by a document's opening paragraph. The structural chunker keyed on numbered section headings, and text <em>before the first heading</em> — the preamble with the parties and effective date — was silently dropped. Fix: emit the preamble as its own chunk. Two lines, several points of hit-rate.</p>
+
+  <h2>Bug #2: persistence that only worked in one process</h2>
+  <p>Everything passed in-process; a fresh process returned garbage. The vector store persisted lazily, and the TF-IDF+SVD embedder refit on the query-time corpus — so vectors written by ingestion and vectors computed at query time lived in different spaces. Fix: persist eagerly at ingestion and load the fitted transformer, never refit. The lesson generalizes: <strong>test RAG persistence across process boundaries</strong>, because that's how production actually runs it.</p>
+
+  <h2>Bug #3: SVD dimension drift</h2>
+  <p>Rebuild the index on a bigger corpus and SVD happily picks a different effective dimensionality — then query vectors no longer match stored ones. The fix pins dimensions and handles drift on rebuild explicitly. If you swap in a hosted embedding model this class of bug disappears, which is exactly why the blueprint specifies one for production.</p>
+
+  <h2>What the benchmark bought</h2>
+  <p>None of these three would have been caught by demoing "a few queries that look right." A 43-question golden set with <code>must_contain</code> assertions, run in CI, is what turns "seems to work" into a number that moves when you break something. The whole benchmark runs in seconds because retrieval is 1.5ms mean — there is no excuse not to have one.</p>
+
+<pre>corpus:     3 documents → 24 chunks (40ms ingest)
+retrieval:  hit-rate@8 = 0.907 (39/43) · mean 1.5ms · p95 1.65ms
+synthesis:  citation-validated, extractive fallback without a key</pre>
+
+  <div class="cta-box">
+    <strong>Try it:</strong> clone <a href="https://github.com/itsmuskanagarwal/clauselens-rag" rel="noopener">clauselens-rag</a>, run <code>make demo</code> — no API key needed. Or <a href="/systems/">watch recorded runs</a> right on this site.
+  </div>
+</article>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+</body>
+</html>
