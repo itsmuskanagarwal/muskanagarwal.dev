@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Muskan Agarwal</title>
+<meta name="description" content="Muskan Agarwal — Frontend Engineer who ships full-stack. Career journey, achievements, tech stack, and projects. Angular, TypeScript, Node.js, AI agent pipelines.">
+<link rel="canonical" href="https://muskanagarwal.dev/portfolio/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Portfolio — Muskan Agarwal">
+<meta property="og:url" content="https://muskanagarwal.dev/portfolio/">
+<meta property="og:description" content="Frontend Engineer who ships full-stack. Angular · TypeScript · AI Agent Development.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF7F0; --cream-2:#F3EFE6; --ink:#17171B; --ink-2:#232328;
+    --gold:#E9B33B; --gold-deep:#C9952A; --muted:#6E6A62; --muted-l:#A9A49B;
+    --card:#FFFDF8; --shadow:#17171B;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:'Manrope',sans-serif;line-height:1.6;overflow-x:hidden}
+  ::selection{background:var(--gold);color:var(--ink)}
+
+  .display{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.01em;line-height:1.02}
+  .section{padding:110px 6vw;position:relative}
+  .section-dark{background:var(--ink);color:var(--cream)}
+  .grid-paper{background-image:linear-gradient(rgba(23,23,27,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(23,23,27,.05) 1px,transparent 1px);background-size:64px 64px}
+  .dark-paper{background-image:linear-gradient(rgba(233,179,59,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(233,179,59,.05) 1px,transparent 1px);background-size:64px 64px}
+  .kicker{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;padding:10px 22px;border-radius:999px;box-shadow:4px 5px 0 var(--shadow)}
+  .section-dark .kicker{box-shadow:4px 5px 0 rgba(233,179,59,.35)}
+  .sec-title{font-size:clamp(2.4rem,6vw,4.2rem);margin:22px 0 10px}
+  .sec-sub{color:var(--muted);font-size:.95rem}
+  .section-dark .sec-sub{color:var(--muted-l)}
+  .center{text-align:center}
+
+  /* ---------- NAV ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:rgba(250,247,240,.85);backdrop-filter:blur(10px);border-bottom:2px solid var(--ink);transform:translateY(-100%);transition:transform .35s}
+  nav.show{transform:translateY(0)}
+  nav .logo{font-family:'Archivo Black';font-size:1.05rem}
+  nav .links{display:flex;gap:22px;flex-wrap:wrap}
+  nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em}
+  nav a:hover{color:var(--gold-deep)}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 5vw 60px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(233,179,59,.22),transparent 65%);top:-140px;right:-140px}
+  .hero::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(23,23,27,.06),transparent 65%);bottom:-120px;left:-120px}
+  .avatar-wrap{position:relative;margin-bottom:36px;z-index:2}
+  .avatar{width:210px;height:210px;border-radius:50%;border:6px solid var(--gold);box-shadow:10px 12px 0 var(--ink);object-fit:cover;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Archivo Black';font-size:4rem}
+  .hi-badge{position:absolute;bottom:6px;right:-30px;background:var(--ink);color:var(--gold);font-weight:800;font-size:.8rem;letter-spacing:.1em;padding:10px 18px;border-radius:999px;box-shadow:4px 5px 0 rgba(23,23,27,.25);transform:rotate(-6deg)}
+  .hero h1{font-size:clamp(3rem,9vw,7rem);z-index:2}
+  .hero .tagline{font-size:clamp(1.1rem,2.6vw,1.6rem);color:var(--muted);font-weight:700;margin-top:14px;z-index:2}
+  .pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px;z-index:2}
+  .pill{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:9px 20px;font-weight:800;font-size:.85rem;box-shadow:4px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+  .pill:hover{transform:translate(2px,2px);box-shadow:2px 3px 0 var(--ink)}
+  .pill.gold{background:var(--gold)}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;animation:bob 2s infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px;align-items:center;max-width:1100px;margin:0 auto}
+  .about-photo{border-radius:var(--radius);border:4px solid var(--gold);box-shadow:12px 14px 0 rgba(233,179,59,.35);aspect-ratio:4/5;background:linear-gradient(160deg,var(--ink-2),#2c2c33);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Archivo Black';font-size:5rem}
+  .about-copy p{margin-bottom:20px;font-size:1.08rem;color:#DDD8CE}
+  .btn{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;padding:14px 28px;border-radius:14px;text-decoration:none;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(0,0,0,.45);transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 rgba(0,0,0,.45)}
+  .btn.ghost{background:transparent;color:var(--gold);border-color:var(--gold);box-shadow:5px 6px 0 rgba(233,179,59,.25)}
+
+  /* ---------- JOURNEY ---------- */
+  .journey{max-width:900px;margin:70px auto 0;position:relative}
+  .road{position:absolute;left:28px;top:0;bottom:0;width:6px;background:repeating-linear-gradient(var(--ink) 0 26px,transparent 26px 44px);border-radius:3px}
+  .stop{position:relative;padding:0 0 56px 90px;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+  .stop.visible{opacity:1;transform:none}
+  .stop::before{content:"";position:absolute;left:14px;top:8px;width:34px;height:34px;border-radius:50%;background:var(--gold);border:4px solid var(--ink);box-shadow:3px 4px 0 rgba(23,23,27,.3)}
+  .stop.now::before{background:var(--ink);border-color:var(--gold)}
+  .stop .when{display:inline-block;background:var(--ink);color:var(--gold);font-weight:800;font-size:.75rem;letter-spacing:.12em;padding:6px 14px;border-radius:999px;margin-bottom:12px}
+  .stop-card{background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 9px 0 rgba(23,23,27,.9);padding:26px 28px}
+  .stop-card h3{font-size:1.25rem;margin-bottom:2px}
+  .stop-card .org{color:var(--gold-deep);font-weight:800;margin-bottom:10px}
+  .stop-card p{color:var(--muted);font-size:.98rem}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tag{border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-size:.74rem;font-weight:700;background:var(--cream-2)}
+
+  /* ---------- ACHIEVEMENTS ---------- */
+  .badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;max-width:1100px;margin:60px auto 0}
+  .badge{background:transparent;border:2px solid var(--gold);border-radius:20px;padding:24px 26px;cursor:pointer;transition:background .25s,transform .15s;color:var(--cream)}
+  .badge:hover{transform:translateY(-3px)}
+  .badge.open{background:var(--gold);color:var(--ink)}
+  .badge h3{font-size:1.05rem;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .badge h3 .plus{font-family:'Archivo Black';transition:transform .25s}
+  .badge.open h3 .plus{transform:rotate(45deg)}
+  .badge .short{font-size:.85rem;opacity:.75;margin-top:6px}
+  .badge .long{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:.92rem;font-weight:600}
+  .badge.open .long{max-height:220px;margin-top:12px}
+  .badge-hint{color:var(--muted-l);font-size:.8rem;margin-top:26px}
+
+  /* ---------- SKILLS ---------- */
+  .notebook{max-width:1150px;margin:60px auto 0;background:#FFFCF3;border:3px solid var(--ink);border-radius:22px;box-shadow:12px 14px 0 var(--ink);overflow:hidden}
+  .notebook-top{background:var(--cream-2);border-bottom:3px solid var(--ink);padding:14px 22px;display:flex;align-items:center;gap:10px}
+  .ring{width:16px;height:16px;border-radius:50%;background:var(--cream);border:2.5px solid var(--ink)}
+  .notebook-top .nb-label{margin-left:auto;font-weight:800;font-size:.75rem;letter-spacing:.2em;color:var(--muted)}
+  .notebook-body{padding:36px 40px;background-image:repeating-linear-gradient(transparent 0 34px,rgba(233,100,80,.14) 34px 35px);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:34px 46px}
+  .skill-cat h4{font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;border-bottom:3px solid var(--gold);display:inline-block;padding-bottom:4px;margin-bottom:14px}
+  .chiplist{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{border:1.5px solid rgba(23,23,27,.55);border-radius:999px;padding:5px 14px;font-size:.8rem;font-weight:700;background:rgba(255,255,255,.7);transition:background .15s,transform .15s}
+  .chip:hover{background:var(--gold);transform:translateY(-2px)}
+
+  /* ---------- PROJECTS ---------- */
+  .notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:34px;max-width:1200px;margin:60px auto 0}
+  .note{background:#FFF9E3;border:2px solid var(--ink);border-radius:6px;box-shadow:8px 10px 0 rgba(23,23,27,.85);padding:26px 26px 22px;position:relative;cursor:pointer;transition:transform .2s}
+  .note:nth-child(odd){transform:rotate(-1.2deg)}
+  .note:nth-child(even){transform:rotate(1.1deg)}
+  .note:hover{transform:rotate(0) translateY(-6px)}
+  .note::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-2deg);width:110px;height:26px;background:rgba(233,179,59,.75);border:1px solid rgba(23,23,27,.2)}
+  .note .num{font-family:'Archivo Black';font-size:.85rem;color:var(--gold-deep)}
+  .note .cat{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .note h3{font-size:1.3rem;margin:8px 0 2px}
+  .note .sub{font-weight:700;color:var(--gold-deep);font-size:.9rem;margin-bottom:10px}
+  .note p{font-size:.93rem;color:#44413B}
+  .note .long{max-height:0;overflow:hidden;transition:max-height .4s}
+  .note.open .long{max-height:300px;margin-top:10px}
+  .note .more{display:inline-block;margin-top:12px;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);border-bottom:2px solid var(--gold)}
+  .nda{color:var(--muted);font-size:.8rem;margin-top:36px}
+
+  /* ---------- REPOS ---------- */
+  .repo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;max-width:1200px;margin:60px auto 0}
+  .repo{background:var(--ink-2);border:2px solid rgba(233,179,59,.4);border-radius:var(--radius);padding:24px 26px;text-decoration:none;color:var(--cream);display:flex;flex-direction:column;gap:10px;transition:transform .18s,border-color .18s}
+  .repo:hover{transform:translateY(-5px);border-color:var(--gold)}
+  .repo h3{font-size:1.08rem;color:var(--gold);display:flex;align-items:center;gap:8px}
+  .repo p{font-size:.9rem;color:#C9C4BA;flex:1}
+  .repo .meta{display:flex;gap:16px;font-size:.78rem;font-weight:700;color:var(--muted-l)}
+  .repo .meta .lang::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:6px}
+  .repos-cta{margin-top:44px}
+
+  /* ---------- SYSTEMS / BLUEPRINTS ---------- */
+  .bp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:26px;max-width:1200px;margin:60px auto 0}
+  .bp{background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 9px 0 rgba(23,23,27,.9);padding:26px;display:flex;flex-direction:column;gap:10px}
+  .bp .bp-tag{align-self:flex-start;background:var(--ink);color:var(--gold);font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+  .bp .bp-tag.live{background:var(--gold);color:var(--ink)}
+  .bp h3{font-size:1.2rem}
+  .bp .vertical{color:var(--gold-deep);font-weight:800;font-size:.85rem}
+  .bp p{font-size:.92rem;color:var(--muted);flex:1}
+  .bp .bp-links{display:flex;gap:14px;margin-top:8px}
+  .bp .bp-links a{font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--gold)}
+
+  /* ---------- ROADMAP ---------- */
+  .lane{max-width:900px;margin:60px auto 0;display:flex;flex-direction:column;gap:18px}
+  .lane-item{display:flex;gap:22px;align-items:flex-start;background:var(--ink-2);border:2px solid rgba(233,179,59,.35);border-radius:var(--radius);padding:22px 26px}
+  .lane-item .phase{font-family:'Archivo Black';color:var(--gold);font-size:1.4rem;min-width:64px}
+  .lane-item h3{font-size:1.05rem;color:var(--cream);margin-bottom:4px}
+  .lane-item p{font-size:.9rem;color:#C9C4BA}
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:820px;margin:50px auto 0}
+  .contact-card{display:flex;align-items:center;gap:14px;background:var(--gold);color:var(--ink);font-weight:800;padding:18px 24px;border-radius:999px;text-decoration:none;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(0,0,0,.5);transition:transform .15s,box-shadow .15s}
+  .contact-card.ghost{background:transparent;color:var(--gold);border-color:var(--gold);box-shadow:5px 6px 0 rgba(233,179,59,.2)}
+  .contact-card:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+  .contact-card .ico{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .contact-card.ghost .ico{background:var(--gold);color:var(--ink)}
+  footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;max-width:1000px;margin:80px auto 0;padding-top:26px;border-top:1.5px solid rgba(233,179,59,.35);color:var(--muted-l);font-size:.85rem}
+  footer b{color:var(--cream)}
+
+  .gold-divider{height:8px;background:var(--gold)}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media(max-width:760px){
+    .about-grid{grid-template-columns:1fr}
+    .stop{padding-left:70px}
+    .notebook-body{padding:26px 22px}
+    nav .links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="logo" href="/" style="text-decoration:none;color:inherit">MUSKAN.A</a>
+  <div class="links">
+    <a href="#about">About</a><a href="#journey">Journey</a><a href="#skills">Skills</a>
+    <a href="#projects">Projects</a><a href="/systems/">RAG Demo</a><a href="/articles/">Articles</a><a href="/plans/">What's Next</a><a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero grid-paper">
+  <div class="avatar-wrap">
+    <div class="avatar" id="avatar">MA</div>
+    <div class="hi-badge">HI THERE!</div>
+  </div>
+  <h1 class="display">Muskan Agarwal</h1>
+  <p class="tagline">Frontend Engineer who ships full-stack</p>
+  <div class="pills">
+    <span class="pill gold">Angular</span><span class="pill">TypeScript</span><span class="pill">RxJS / NgRx</span>
+    <span class="pill">Node.js / .NET</span><span class="pill gold">AI Agent Development</span>
+  </div>
+  <div class="scroll-hint">Scroll ↓</div>
+</header>
+
+<!-- ABOUT -->
+<section class="section section-dark dark-paper" id="about">
+  <div class="about-grid">
+    <div class="about-photo reveal" id="aboutPhoto">MA</div>
+    <div class="about-copy reveal">
+      <span class="kicker">About Me</span>
+      <h2 class="display sec-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">Design-minded.<br>Architecture-solid.</h2>
+      <p>I have a passion for building polished, accessible UIs that feel great to use. My experience spans from architecting robust Angular SPAs to developing scalable Node.js backends and integrating modern AI agent pipelines.</p>
+      <p>I thrive at the intersection of design and engineering — ensuring that every pixel is perfect while the underlying architecture remains solid. Always curious and always learning, I bring a full-stack mindset to frontend challenges.</p>
+      <a class="btn" href="#contact">Based in the Cloud ☁</a>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="section grid-paper" id="journey">
+  <div class="center">
+    <span class="kicker">Career + Education</span>
+    <h2 class="display sec-title">The Journey</h2>
+    <p class="sec-sub">Scroll to drive the road</p>
+  </div>
+  <div class="journey">
+    <div class="road"></div>
+
+    <div class="stop">
+      <span class="when">2018 – 2021</span>
+      <div class="stop-card">
+        <h3>Bachelor of Computer Applications (BCA)</h3>
+        <div class="org">St. Xavier's College, Jaipur</div>
+        <p>Built CS foundations alongside real-world experience — completed a graphic design internship and a teaching internship at an NGO during the same years.</p>
+        <div class="tags"><span class="tag">Computer Science</span><span class="tag">Graphic Design Internship</span><span class="tag">NGO Teaching</span></div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <span class="when">2018 – 2021</span>
+      <div class="stop-card">
+        <h3>Graphic Design Intern + Teaching Intern</h3>
+        <div class="org">Incmink Co. · NGO</div>
+        <p>Alongside BCA, interned as a graphic designer at Incmink Co. and volunteered as a teaching intern at an NGO — sharpening both creative and communication skills in parallel with computer science.</p>
+        <div class="tags"><span class="tag">Graphic Design</span><span class="tag">Incmink Co.</span><span class="tag">Parallel Learning</span></div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <span class="when">2021 – 2023</span>
+      <div class="stop-card">
+        <h3>Master of Computer Applications (MCA)</h3>
+        <div class="org">Poornima University</div>
+        <p>Specialization in Artificial Intelligence &amp; Data Science. CGPA 8.9/10. 2× Gold Medalist — Highest Scorer Across the Entire Program.</p>
+        <div class="tags"><span class="tag">AI &amp; Data Science</span><span class="tag">CGPA 8.9/10</span><span class="tag">2× Gold Medalist</span></div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <span class="when">May 2022 – Jul 2022</span>
+      <div class="stop-card">
+        <h3>Software Analyst</h3>
+        <div class="org">OnGraph Technologies</div>
+        <p>Joined the industry mid-degree. Dived straight into production Angular code and shipped real features within weeks.</p>
+        <div class="tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">Enterprise Apps</span></div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <span class="when">Jan 2023 – Mar 2025</span>
+      <div class="stop-card">
+        <h3>Software Engineer <small style="font-weight:700;color:var(--gold-deep)">(promoted from Software Analyst)</small></h3>
+        <div class="org">OnGraph Technologies</div>
+        <p>Promoted after demonstrating ownership and delivery. Led frontend modules, built AI-integrated pipelines, and mentored teammates.</p>
+        <div class="tags"><span class="tag">Promoted</span><span class="tag">Angular</span><span class="tag">NgRx</span><span class="tag">AI Pipelines</span><span class="tag">Node.js</span></div>
+      </div>
+    </div>
+
+    <div class="stop now">
+      <span class="when">Mar 2025 – Present · NOW</span>
+      <div class="stop-card" style="border-color:var(--gold);box-shadow:8px 9px 0 rgba(233,179,59,.8)">
+        <h3>Software Engineer</h3>
+        <div class="org">PrismHR</div>
+        <p>Currently engineering HR software at scale — building performant Angular UIs, full-stack features, and AI-augmented workflows for enterprise clients.</p>
+        <div class="tags"><span class="tag">Angular</span><span class="tag">Full-Stack</span><span class="tag">AI</span><span class="tag">HR Tech</span><span class="tag">Still Building…</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="section section-dark dark-paper center" id="achievements">
+  <span class="kicker">🏆 Achievements</span>
+  <h2 class="display sec-title">Proof of Work</h2>
+  <div class="badges" id="badges"></div>
+  <p class="badge-hint">Click each badge to expand</p>
+</section>
+
+<!-- SKILLS -->
+<section class="section grid-paper center" id="skills">
+  <span class="kicker">Tech Stack</span>
+  <h2 class="display sec-title">Skills</h2>
+  <p class="sec-sub">The full toolbox — organized like my notebook</p>
+  <div class="notebook" style="text-align:left">
+    <div class="notebook-top">
+      <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+      <div class="nb-label">CORE TECH</div>
+    </div>
+    <div class="notebook-body" id="skillsBody"></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section center" id="projects" style="background:var(--cream-2)">
+  <span class="kicker">Things I've Built</span>
+  <h2 class="display sec-title">Projects</h2>
+  <p class="sec-sub">Click a note to expand it</p>
+  <div class="notes" id="notes"></div>
+  <p class="nda">Client project details omitted per NDA</p>
+</section>
+
+<!-- OPEN SOURCE -->
+<section class="section section-dark dark-paper center" id="opensource">
+  <span class="kicker">GitHub</span>
+  <h2 class="display sec-title">Open Source</h2>
+  <p class="sec-sub">Live from the GitHub API — stars, languages and all</p>
+  <div class="repo-grid" id="repoGrid"></div>
+  <div class="repos-cta">
+    <a class="btn" href="https://github.com/itsmuskanagarwal" target="_blank" rel="noopener">All repositories →</a>
+  </div>
+</section>
+
+<!-- SYSTEMS & BLUEPRINTS -->
+<section class="section grid-paper center" id="systems">
+  <span class="kicker">RAG &amp; Retrieval</span>
+  <h2 class="display sec-title">Systems &amp; Blueprints</h2>
+  <p class="sec-sub">Production-grade retrieval systems — one implemented, five fully blueprinted</p>
+  <div class="bp-grid" id="bpGrid"></div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section section-dark dark-paper center" id="roadmap">
+  <span class="kicker">What's Next</span>
+  <h2 class="display sec-title">Currently Building</h2>
+  <div class="lane" id="lane"></div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- CONTACT -->
+<section class="section section-dark dark-paper center" id="contact" style="padding-bottom:60px">
+  <h2 class="display sec-title" style="color:var(--gold)">Let's Build Something</h2>
+  <p class="sec-sub" style="max-width:520px;margin:0 auto">Open to interesting full-stack challenges, AI-adjacent frontend work, and teams who care about craft.</p>
+  <div class="contact-grid">
+    <a class="contact-card" href="mailto:hello@muskanagarwal.dev"><span class="ico">✉</span> hello@muskanagarwal.dev</a>
+    <a class="contact-card ghost" href="https://linkedin.com/in/itsmuskanagarwal" target="_blank" rel="noopener"><span class="ico">in</span> linkedin.com/in/itsmuskanagarwal</a>
+    <a class="contact-card" href="https://github.com/itsmuskanagarwal" target="_blank" rel="noopener"><span class="ico">gh</span> github.com/itsmuskanagarwal</a>
+    <a class="contact-card ghost" href="https://medium.com/@developerwhoismean" target="_blank" rel="noopener"><span class="ico">M</span> medium.com/@developerwhoismean</a>
+  </div>
+  <footer>
+    <b>Muskan Agarwal</b><span>Frontend Engineer who ships full-stack</span><span id="year"></span>
+  </footer>
+</section>
+
+<script>
+/* ---------- data ---------- */
+const ACHIEVEMENTS=[
+ ["Promoted in < 1 Year","Recognized for exceptional performance","Recognized for exceptional performance and promoted from Software Analyst to Software Engineer at OnGraph Technologies in under 12 months, well ahead of the typical track."],
+ ["AI Sprint Accelerator","40% sprint work completed by AI agents with 90%+ accuracy","Designed and orchestrated multi-agent AI workflows that handled 40% of sprint-level tasks autonomously, maintaining over 90% project accuracy. Redefined what a 'sprint' looks like for the team."],
+ ["Polyglot Language Contributor","Worked on a programming language spanning 6+ languages","Contributed to the design and implementation of a programming language with components written in Rust, Python, Go, JavaScript, C#, and C++. A rare full-spectrum engineering challenge."],
+ ["AI Agent Pipeline Owner","End-to-end AI orchestration in production","Led end-to-end design and implementation of an AI agent orchestration system integrated into a production frontend product. Owned the full lifecycle from prompt engineering to deployment."],
+ ["Angular Champion","Component libraries across 3 client projects","Internal recognition for building reusable Angular component libraries adopted across 3 separate client projects — saving weeks of duplicated work per quarter."],
+ ["Full-Stack Delivery","Solo greenfield frontend + backend","Single-handedly delivered a greenfield Node.js/.NET API layer paired with an Angular frontend for a mid-size enterprise client — from architecture to prod deployment."]
+];
+const SKILLS={
+ "Frontend":["Angular (Advanced)","AngularJS","TypeScript","JavaScript (ES6+)","RxJS","NgRx","Angular CLI","HTML5","CSS3","SCSS","Bootstrap","Responsive Design","Syncfusion","ChartJS","ExcelJS"],
+ "Backend":["Node.js","NestJS","Express.js",".NET","RESTful APIs","WebSockets","Socket.io"],
+ "Testing & Quality":["Unit Testing","Jasmine / Karma","Code Reviews","PR Validation","Debugging","Static Analysis"],
+ "CI/CD & Cloud":["Git","GitHub","Azure (AZ-900)","Azure AI (AI-900)","CI/CD Pipelines","Docker","Webpack","npm"],
+ "Databases":["MongoDB","MySQL","SQL"],
+ "AI & Automation":["LLM APIs (Claude, OpenAI)","GitHub Copilot","Prompt Engineering","AI Agent Development","Agentic Workflows","Multi-Agent Systems","LLM Integration","RAG Pipelines","Eval Harnesses"],
+ "Languages":["TypeScript","JavaScript","Python","Rust"],
+ "Remote Collaboration":["Microsoft Teams","Slack","Jira","Confluence","GitHub (async PR workflows)","Async cross-timezone delivery"]
+};
+const PROJECTS=[
+ ["01","Open Collaboration","Rust Compiler Collab","With a senior Google engineer","Collaborated on a Rust-based compiler that translates a simplified system design syntax into Python, Java, Go, C, C#, JavaScript, and UML diagrams.","One of the most technically stretching projects I've worked on — parsing, code generation across seven targets, and UML emission from a single grammar."],
+ ["02","Internal Library","Angular Package Engineering","Internal component libraries","Designed and published internal Angular component libraries as npm packages — reusable across projects, versioned, tree-shakeable.","Learned the science behind building for other developers, not just end users: semver discipline, API surface design, and docs that answer questions before they're asked."],
+ ["03","Personal Build","PenPal AI","AI writing agent for professionals","Built an AI agent that writes polished conversational texts, emails, and notes for professionals. No login required — AI credits allocated per unique IP.","Thoughtful about privacy from day one: no accounts, no stored messages, rate limits enforced per IP at the edge."],
+ ["04","Client Work (NDA)","Enterprise Client Delivery","SaaS · Government · Scale","Worked on production applications generating millions in annual revenue — SaaS platforms, government systems, and enterprise Angular apps.","Domains spanned finance, HR, and public sector. Details kept confidential per NDA."],
+ ["05","Dev Tool","Caveman Local UI","Dev tooling — zero extra dependencies","Built a local-environment version of the caveman repo with a full UI layer, so developers can integrate it into their projects visually.","No additional libraries to install, no setup friction — drop it in and go."],
+ ["06","Side Projects","Side Projects Lab","Chatbots · AI tools · Experiments","A running collection of smaller builds: AI-powered chatbots, resume builders with LLM integration, quick automation scripts, and weekend experiments.","These are where I test ideas before they grow into real projects."]
+];
+const CURATED_REPOS=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","caveman-but-local"];
+const REPO_FALLBACK={
+ "effective-agents-lab":"Anthropic's 'Building Effective AI Agents' playbook, implemented end to end: 13 pattern/agent modules, an eval harness, and a 13-chapter learning guide.",
+ "review-rails":"PR review automation that enforces your team's standards: deterministic checks first, LLM judgment only where rules cannot reach, inside your own CI.",
+ "clauselens-rag":"Local-first hybrid-retrieval RAG pipeline for contract intelligence: structural chunking, BM25 + dense fusion, citation-validated synthesis. 90.7% retrieval on a 43-question golden set.",
+ "memory-matrix":"A Claude skill that scans any legacy codebase and builds a durable 'memory matrix': frontend, backend, security, and database inventories with file:line evidence.",
+ "ng-reaper":"Find provably dead code in your Angular app — components, templates, services, pipes, NgRx — and delete the safe parts automatically.",
+ "agent-pipe":"A small, typed, composable pipeline library for multi-step LLM workflows in TypeScript.",
+ "ng-perf-lens":"Chrome DevTools extension + npm agent making Angular change-detection cost visible per component, per cycle, in real time.",
+ "professional-message-rewriter":"AI-powered workplace communication assistant — rewrites Slack, email, and Jira messages with the right tone.",
+ "caveman-but-local":"Caveman token-saving files that can be dropped into any project locally."
+};
+const BLUEPRINTS=[
+ ["ClauseLens","Legal Ops","Post-signature contract intelligence over your existing repository: renewal and obligation answers with clause-level citations. Reference implementation open-sourced — hybrid retrieval, RRF fusion, citation validation.","live","https://github.com/itsmuskanagarwal/clauselens-rag"],
+ ["AuditLoom","Compliance","Evidence-to-control reasoning layer for SOC 2 / ISO 27001: answers auditors and finds gaps before they do.","blueprint",null],
+ ["BidForge","Sales / GRC","RFP and security-questionnaire first-draft engine with a self-learning, freshness-scored answer library.","blueprint",null],
+ ["AuthPilot","Healthcare Ops","Continuously-crawled payer-policy corpus: prior-auth requirements, checklists, and change alerts for clinics and RCM firms.","blueprint",null],
+ ["LedgerScope","Financial","Filings + transcripts + credit-agreement intelligence with covenant extraction, for small credit and equity funds.","blueprint",null]
+];
+const ROADMAP=[
+ ["01","Portfolio, live on my own domain","This site — moving from Replit to a permanent home with blog and live demos. You're looking at Phase 1."],
+ ["02","review-rails v1 on GitHub Marketplace","Tagged release, marketplace listing, dogfooded on my own repositories."],
+ ["03","ClauseLens to production spec","Real embeddings, pgvector, and a hosted rate-limited demo you can try right here."],
+ ["04","Writing","One deep-dive post per shipped system — architecture decisions, honest benchmarks, what broke."]
+];
+
+/* ---------- render ---------- */
+const el=(h)=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+
+const badges=document.getElementById('badges');
+ACHIEVEMENTS.forEach(([t,s,l])=>{
+  const b=el(`<div class="badge"><h3>${t}<span class="plus">+</span></h3><div class="short">${s}</div><div class="long">${l}</div></div>`);
+  b.onclick=()=>b.classList.toggle('open');badges.appendChild(b);
+});
+
+const sb=document.getElementById('skillsBody');
+Object.entries(SKILLS).forEach(([cat,items])=>{
+  sb.appendChild(el(`<div class="skill-cat"><h4>${cat}</h4><div class="chiplist">${items.map(i=>`<span class="chip">${i}</span>`).join('')}</div></div>`));
+});
+
+const notes=document.getElementById('notes');
+PROJECTS.forEach(([n,c,t,s,p,lg])=>{
+  const nEl=el(`<div class="note"><span class="num">${n}</span> · <span class="cat">${c}</span><h3>${t}</h3><div class="sub">${s}</div><p>${p}</p><div class="long"><p>${lg}</p></div><span class="more">Read more</span></div>`);
+  nEl.onclick=()=>{nEl.classList.toggle('open');nEl.querySelector('.more').textContent=nEl.classList.contains('open')?'Show less':'Read more'};
+  notes.appendChild(nEl);
+});
+
+const bpg=document.getElementById('bpGrid');
+BLUEPRINTS.forEach(([name,vert,desc,status,repo])=>{
+  bpg.appendChild(el(`<div class="bp"><span class="bp-tag ${status==='live'?'live':''}">${status==='live'?'Reference build on GitHub':'Blueprint · Build queued'}</span><h3>${name}</h3><div class="vertical">${vert}</div><p>${desc}</p><div class="bp-links">${repo?`<a href="${repo}" target="_blank" rel="noopener">Repository →</a>`:''}</div></div>`));
+});
+
+const laneEl=document.getElementById('lane');
+ROADMAP.forEach(([ph,t,d])=>laneEl.appendChild(el(`<div class="lane-item"><div class="phase">${ph}</div><div><h3>${t}</h3><p>${d}</p></div></div>`)));
+
+/* GitHub repos — live fetch with fallback */
+const rg=document.getElementById('repoGrid');
+function repoCard(name,desc,lang,stars,url){
+  return el(`<a class="repo" href="${url}" target="_blank" rel="noopener"><h3>▣ ${name}</h3><p>${desc||''}</p><div class="meta">${lang?`<span class="lang">${lang}</span>`:''}<span>★ ${stars??0}</span></div></a>`);
+}
+fetch('https://api.github.com/users/itsmuskanagarwal/repos?per_page=100&sort=pushed')
+ .then(r=>{if(!r.ok)throw 0;return r.json()})
+ .then(repos=>{
+   const byName=Object.fromEntries(repos.map(r=>[r.name,r]));
+   CURATED_REPOS.forEach(n=>{const r=byName[n];if(r)rg.appendChild(repoCard(r.name,r.description||REPO_FALLBACK[n],r.language,r.stargazers_count,r.html_url))});
+   if(!rg.children.length)throw 0;
+ })
+ .catch(()=>{CURATED_REPOS.forEach(n=>rg.appendChild(repoCard(n,REPO_FALLBACK[n],null,null,`https://github.com/itsmuskanagarwal/${n}`)))});
+
+/* ---------- behavior ---------- */
+document.getElementById('year').textContent=new Date().getFullYear();
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('show',scrollY>innerHeight*.6));
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.15});
+document.querySelectorAll('.stop,.reveal').forEach(s=>io.observe(s));
+
+/* profile photo: drop assets/profile.jpg + assets/about.jpg into the repo and these swap in automatically */
+[['avatar','assets/profile.jpg'],['aboutPhoto','assets/about.jpg']].forEach(([id,src])=>{
+  const img=new Image();img.onload=()=>{const d=document.getElementById(id);d.innerHTML='';d.style.background=`center/cover url('${src}')`};img.src=src;
+});
+</script>
+</body>
+</html>
