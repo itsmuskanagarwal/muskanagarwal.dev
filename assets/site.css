@@ -47,5 +47,9 @@ img{max-width:100%}
 .site-footer b{color:var(--cream)}
 .site-footer a{color:var(--gold);text-decoration:none;font-weight:700}
 
-@media(max-width:760px){.site-nav .links{gap:12px}.site-nav a{font-size:.7rem}}
+@media(max-width:760px){
+  .site-nav .links{gap:12px;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:68vw}
+  .site-nav .links::-webkit-scrollbar{display:none}
+  .site-nav a{font-size:.7rem;white-space:nowrap}
+}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
