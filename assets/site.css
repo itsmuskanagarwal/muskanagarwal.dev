@@ -1,0 +1,51 @@
+/* Muskan Agarwal — shared design system (charcoal / cream / gold) */
+:root{
+  --cream:#FAF7F0; --cream-2:#F3EFE6; --ink:#17171B; --ink-2:#232328;
+  --gold:#E9B33B; --gold-deep:#C9952A; --muted:#6E6A62; --muted-l:#A9A49B;
+  --card:#FFFDF8; --shadow:#17171B; --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'Manrope',sans-serif;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--ink)}
+img{max-width:100%}
+.display{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.01em;line-height:1.02}
+.section{padding:100px 6vw;position:relative}
+.section-dark{background:var(--ink);color:var(--cream)}
+.grid-paper{background-image:linear-gradient(rgba(23,23,27,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(23,23,27,.05) 1px,transparent 1px);background-size:64px 64px}
+.dark-paper{background-image:linear-gradient(rgba(233,179,59,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(233,179,59,.05) 1px,transparent 1px);background-size:64px 64px}
+.kicker{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;padding:10px 22px;border-radius:999px;box-shadow:4px 5px 0 var(--shadow)}
+.section-dark .kicker{box-shadow:4px 5px 0 rgba(233,179,59,.35)}
+.sec-title{font-size:clamp(2.2rem,5.5vw,4rem);margin:22px 0 10px}
+.sec-sub{color:var(--muted);font-size:.95rem}
+.section-dark .sec-sub{color:var(--muted-l)}
+.center{text-align:center}
+.btn{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;padding:14px 28px;border-radius:14px;text-decoration:none;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(0,0,0,.45);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 rgba(0,0,0,.45)}
+.btn.ghost{background:transparent;color:var(--gold);border-color:var(--gold);box-shadow:5px 6px 0 rgba(233,179,59,.25)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-size:.74rem;font-weight:700;background:var(--cream-2)}
+.section-dark .tag{border-color:rgba(233,179,59,.5);background:transparent;color:var(--cream)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+.gold-divider{height:8px;background:var(--gold)}
+
+/* nav */
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:rgba(23,23,27,.82);backdrop-filter:blur(10px);border-bottom:2px solid rgba(233,179,59,.4)}
+.site-nav .logo{font-family:'Archivo Black';font-size:1.02rem;color:var(--gold);text-decoration:none}
+.site-nav .links{display:flex;gap:20px;flex-wrap:wrap}
+.site-nav a{color:var(--cream);text-decoration:none;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+.site-nav a:hover,.site-nav a[aria-current="page"]{color:var(--gold)}
+.nav-pad{height:64px}
+
+/* cards */
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 9px 0 rgba(23,23,27,.9);padding:26px}
+.card-dark{background:var(--ink-2);border:2px solid rgba(233,179,59,.4);border-radius:var(--radius);padding:24px 26px;color:var(--cream)}
+
+/* footer */
+.site-footer{background:var(--ink);color:var(--muted-l);padding:46px 6vw;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.85rem;border-top:2px solid rgba(233,179,59,.3)}
+.site-footer b{color:var(--cream)}
+.site-footer a{color:var(--gold);text-decoration:none;font-weight:700}
+
+@media(max-width:760px){.site-nav .links{gap:12px}.site-nav a{font-size:.7rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
