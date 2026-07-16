@@ -128,8 +128,14 @@ export function bm25Search(chunks, query, k = 8) {
 
 /* ---------------- Gemini wrappers ---------------- */
 const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/";
-const GEN_MODEL_PRIMARY = "gemini-2.5-flash-lite";
-const GEN_MODEL_FALLBACK = "gemini-2.5-flash";
+// NOTE (deviation from original PRP-01 spec, verified live 2026-07-16):
+// The originally-specified pinned models "gemini-2.5-flash-lite" /
+// "gemini-2.5-flash" return 404 "no longer available to new users" for this
+// API key. Using Google's "latest" alias models instead, confirmed working
+// (200) against this key via direct API test. Dated 2.0-series models hit
+// 429 quota-exceeded on this key's tier, so they are not viable fallbacks.
+const GEN_MODEL_PRIMARY = "gemini-flash-lite-latest";
+const GEN_MODEL_FALLBACK = "gemini-flash-latest";
 
 export async function geminiGenerate(env, systemPrompt, userPrompt, { temperature = 0.2, maxOutputTokens = 400 } = {}) {
   const body = {
