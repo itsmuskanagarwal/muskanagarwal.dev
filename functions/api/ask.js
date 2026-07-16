@@ -17,7 +17,10 @@ function parseSources(text) {
   const m = text.match(/SOURCES:\s*(.+)\s*$/i);
   if (!m) return { answer: text.trim(), ids: [] };
   const answer = text.slice(0, m.index).trim();
-  const ids = m[1].split(",").map(s => s.trim()).filter(Boolean);
+  // The model sometimes echoes the "[id]" bracket format it sees in the CONTEXT
+  // block instead of bare ids (e.g. "SOURCES: [foo], [bar]"). Strip brackets and
+  // any other stray punctuation so those still validate against the hit-id set.
+  const ids = m[1].split(",").map(s => s.trim().replace(/[\[\]]/g, "")).filter(Boolean);
   return { answer, ids };
 }
 
