@@ -1,0 +1,19 @@
+# PRP-01: Cloudflare Pages Functions config (local dev + KV binding declaration).
+# This project is deployed as Cloudflare Pages (see README.md), so `functions/`
+# is auto-detected and deployed alongside the static site on every push — no
+# separate `wrangler deploy` step for the API routes.
+#
+# Local dev:   npx wrangler pages dev . --kv RATE_KV
+# Production KV binding + the GEMINI_API_KEY secret must be set once in the
+# Cloudflare dashboard (Pages project → Settings → Functions) — see
+# functions/README.md for exact steps. This file documents the binding name;
+# it is not sufficient on its own for a Git-integrated Pages deploy to pick up
+# bindings, per Cloudflare's current Pages behavior.
+
+name = "muskanagarwal-dev"
+pages_build_output_dir = "."
+compatibility_date = "2024-09-01"
+
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
