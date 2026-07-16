@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demos are not products: auditing my own GitHub — Muskan Agarwal</title>
+<meta name="description" content="I audited every public repo on my GitHub and found the same pattern: working demos with no deploy target, no phasing, and a README that knows it's stalled. The fix is stage labels and ship gates.">
+<link rel="canonical" href="https://muskanagarwal.dev/articles/demos-are-not-products/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Demos are not products: auditing my own GitHub">
+<meta property="og:description" content="I audited every public repo on my GitHub and found the same pattern: working demos with no deploy target, no phasing, and a README that knows it's stalled. The fix is stage labels and ship gates.">
+<meta property="og:url" content="https://muskanagarwal.dev/articles/demos-are-not-products/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"Demos are not products: auditing my own GitHub",
+"datePublished":"2026-07-16","dateModified":"2026-07-16",
+"author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
+"mainEntityOfPage":"https://muskanagarwal.dev/articles/demos-are-not-products/"}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  article{max-width:760px;margin:0 auto;text-align:left}
+  article .date{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  article h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 26px}
+  article h2{font-size:1.35rem;margin:38px 0 12px;font-family:'Archivo Black';text-transform:uppercase}
+  article p{margin-bottom:18px;font-size:1.02rem}
+  article code{background:var(--cream-2);border:1px solid rgba(23,23,27,.2);border-radius:6px;padding:1px 6px;font-size:.88em}
+  article pre{background:#101014;color:#D8D3C8;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:.84rem;line-height:1.6;margin-bottom:18px;border:2px solid rgba(233,179,59,.35)}
+  .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
+  .cta-box a{color:var(--gold);font-weight:800}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/" aria-current="page">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section grid-paper">
+<article>
+  <span class="date">July 16, 2026 · Build in public · Process</span>
+  <h1 class="display">Demos are not products: auditing my own GitHub</h1>
+
+  <p>I went through every public repo on my GitHub this week and asked one question of each: is this a demo or a product? The honest answer, more often than I'd like, was demo. Not broken, not abandoned — just permanently parked at a stage where the thing works if you follow the README, but there's no path from here to a user who didn't clone it themselves.</p>
+
+  <p>Three repos in particular illustrate the pattern clearly enough to be worth writing down, because the failure mode is the same in all three and it's one I suspect I'm not the only person repeating.</p>
+
+  <h2>What "reference implementation" actually means</h2>
+  <p><a href="https://github.com/itsmuskanagarwal/clauselens-rag">clauselens-rag</a> is the most complete thing in my GitHub. It has a benchmark, a golden set, a citation validator, 23 tests, and a documented 90.7% retrieval hit-rate. The README calls it a "reference implementation" and means it: there's an explicit table comparing what the production blueprint specifies against what this build actually contains.</p>
+
+  <p>That table is not flattering. Auth: not implemented. Hosting: not implemented. Async ingestion, multi-tenancy, observability, secrets management: all not implemented. The README's own "What's honestly not here" section lists them by name. The code is real — the retrieval pipeline works, the citation validator works, the API server starts. But there is no path from <code>make serve</code> to a real user, because the moment a real user arrives you need auth in front of the API, which the README explicitly says not to expose publicly as-is.</p>
+
+  <p>This is a demo. A well-documented, honest demo — but a demo. "Reference implementation" is a more precise label than "v0.1," and I think that precision is useful. It sets the right expectation: this is the retrieval architecture, built and tested, not the system you'd run for a paying customer.</p>
+
+  <h2>The module-status-table problem</h2>
+  <p><a href="https://github.com/itsmuskanagarwal/effective-agents-lab">effective-agents-lab</a> has 15 modules. Every one of them has offline tests that pass. Every one of them has a "live-verified" column in the module status table. Every cell in that column is ❌.</p>
+
+  <p>The README explains why: no API key was available when the repo was built, so no module has actually run against the real Anthropic API. That's an honest disclosure, and the README says explicitly what "live-verified" means — not that the code is wrong, but that whether the prompts actually work, whether the agents actually converge, whether the tool selection is sensible — none of that has been confirmed outside a fabricated test fixture.</p>
+
+  <p>This is a subtler version of the same problem. The repo is thoroughly tested against offline mocks, but the thing you actually care about — does the agent behave correctly when the model is real? — is unverified. It works in the test suite. It might not work in practice. Without running it against the real API, you don't know, and neither do I.</p>
+
+  <p>A module-status table that is entirely ❌ in the live-verified column isn't a bug. It's a ship gate that hasn't been passed. The value of the table is precisely that it makes the gap visible instead of hiding it behind a passing test count.</p>
+
+  <h2>The v0.1 that knows what v0.2 needs</h2>
+  <p><a href="https://github.com/itsmuskanagarwal/ng-perf-lens">ng-perf-lens</a> is the most explicit about its own status. The README opens with: "Status: v0.1 — spike gate passed, MVP skeleton built and tested. This is not yet the full product described in the original project blueprint." Then it lists, in the "Known limitations" section, exactly what's missing: no real-browser end-to-end test (Playwright couldn't download in the build environment), trigger attribution always returns <code>'unknown'</code>, the overhead audit has an unresolved methodology gap that the docs/SPIKE-RESULTS.md documents in full.</p>
+
+  <p>This is the healthiest version of the pattern, and it's still a stall. The v0.1 label is accurate. The spike gate was a real gate — something that had to pass before the MVP skeleton was worth building. But loading the unpacked extension in a real Chrome and seeing the panel render live data against the fixture app: that step hasn't happened. The repo knows it hasn't happened. It's written into the README. And it hasn't happened yet.</p>
+
+  <h2>Why demos stay demos</h2>
+  <p>Looking across all three, the failure modes cluster around the same three causes.</p>
+
+  <p>The first is no deploy target. clauselens-rag has no path to a real user because the production infrastructure (auth, hosting, observability) was out of scope for the reference build. That's a reasonable scoping decision, but without naming the deploy target and the specific steps to reach it, the gap between "this runs locally" and "a user can use this" stays abstract, and abstract gaps don't get crossed.</p>
+
+  <p>The second is incomplete live verification. effective-agents-lab passes offline. That's necessary but it's not sufficient. Offline tests that mock the model tell you the plumbing is right; they don't tell you the agent behavior is right. A ship gate that requires at least one live-verified run per module would make the remaining work concrete instead of deferred.</p>
+
+  <p>The third is an unscheduled gate. ng-perf-lens has a 12-month blueprint with v0.1 through v0.2+ clearly staged, and the spike gate was a real milestone. But the one thing still missing — load the extension in a real Chrome, confirm the panel renders live data — is undated and unassigned. The gate exists; it just hasn't been put on a calendar.</p>
+
+  <h2>The fix is stage labels and ship gates, not more features</h2>
+  <p>What all three repos actually need is not more code. clauselens-rag doesn't need more retrieval work — it already hit 90.7%. effective-agents-lab doesn't need more modules. ng-perf-lens doesn't need v0.2 features yet.</p>
+
+  <p>What they need is a next concrete step with a pass/fail condition. For clauselens-rag: add auth in front of the FastAPI app, even minimal Bearer token validation, and update the README's "What's honestly not here" section when it's done. For effective-agents-lab: set <code>RUN_LIVE_TESTS=1</code>, run the suite against a real API key, and update the live-verified column with real results. For ng-perf-lens: load the extension in a real Chrome and confirm the panel renders live data — a single checkbox item that closes the biggest open gap in the SPIKE-RESULTS documentation.</p>
+
+  <p>Stage labels — "reference implementation," "v0.1," "experimental" — are the most honest thing in a repo README. They say: this works and here's exactly what it isn't yet. Ship gates are what turn those labels into milestones instead of permanent disclaimers. Without a gate, the label just describes where the build stopped.</p>
+
+  <div class="cta-box">
+    <strong>The repos:</strong> <a href="https://github.com/itsmuskanagarwal/clauselens-rag" rel="noopener">clauselens-rag</a> (reference implementation), <a href="https://github.com/itsmuskanagarwal/effective-agents-lab" rel="noopener">effective-agents-lab</a> (13 patterns, live-verification pending), <a href="https://github.com/itsmuskanagarwal/ng-perf-lens" rel="noopener">ng-perf-lens</a> (v0.1, spike gate passed). The <a href="/projects/">projects page</a> tracks what's next for each.
+  </div>
+</article>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+</body>
+</html>
