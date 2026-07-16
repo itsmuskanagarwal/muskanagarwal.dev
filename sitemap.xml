@@ -5,6 +5,7 @@
   <url><loc>https://muskanagarwal.dev/projects/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://muskanagarwal.dev/systems/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://muskanagarwal.dev/articles/</loc><priority>0.8</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://muskanagarwal.dev/articles/demos-are-not-products/</loc><priority>0.7</priority><lastmod>2026-07-16</lastmod></url>
   <url><loc>https://muskanagarwal.dev/articles/rag-replay-demo-pattern/</loc><priority>0.7</priority><lastmod>2026-07-15</lastmod></url>
   <url><loc>https://muskanagarwal.dev/articles/building-clauselens-rag/</loc><priority>0.7</priority><lastmod>2026-07-15</lastmod></url>
   <url><loc>https://muskanagarwal.dev/plans/</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
