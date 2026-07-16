@@ -6,6 +6,13 @@
     <description>Engineering writing by Muskan Agarwal: AI agents, RAG systems, Angular performance, and honest build logs.</description>
     <language>en-us</language>
     <item>
+      <title>Demos are not products: auditing my own GitHub</title>
+      <link>https://muskanagarwal.dev/articles/demos-are-not-products/</link>
+      <guid>https://muskanagarwal.dev/articles/demos-are-not-products/</guid>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <description>I went through every public repo and asked one question of each: demo or product? The honest answer was demo, more often than I'd like — and the failure mode was the same in all three cases.</description>
+    </item>
+    <item>
       <title>The replay-demo pattern: show your RAG working without an API key</title>
       <link>https://muskanagarwal.dev/articles/rag-replay-demo-pattern/</link>
       <guid>https://muskanagarwal.dev/articles/rag-replay-demo-pattern/</guid>
