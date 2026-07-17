@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The agent loop: the pattern under every AI agent — Muskan Agarwal</title>
+<meta name="description" content="Strip every framework away and an AI agent is one loop: give a model tools, let it decide what to call, feed results back, repeat. Here's that loop in 81 lines of Python.">
+<link rel="canonical" href="https://muskanagarwal.dev/articles/agent-loop-fundamentals/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The agent loop: the pattern under every AI agent">
+<meta property="og:description" content="Strip every framework away and an AI agent is one loop: give a model tools, let it decide what to call, feed results back, repeat. Here's that loop in 81 lines of Python.">
+<meta property="og:url" content="https://muskanagarwal.dev/articles/agent-loop-fundamentals/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"The agent loop: the pattern under every AI agent",
+"datePublished":"2026-07-17","dateModified":"2026-07-17",
+"author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
+"mainEntityOfPage":"https://muskanagarwal.dev/articles/agent-loop-fundamentals/"}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  article{max-width:760px;margin:0 auto;text-align:left}
+  article .date{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  article h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 26px}
+  article h2{font-size:1.35rem;margin:38px 0 12px;font-family:'Archivo Black';text-transform:uppercase}
+  article p{margin-bottom:18px;font-size:1.02rem}
+  article code{background:var(--cream-2);border:1px solid rgba(23,23,27,.2);border-radius:6px;padding:1px 6px;font-size:.88em}
+  article pre{background:#101014;color:#D8D3C8;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:.84rem;line-height:1.6;margin-bottom:18px;border:2px solid rgba(233,179,59,.35)}
+  .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
+  .cta-box a{color:var(--gold);font-weight:800}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/" aria-current="page">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section grid-paper">
+<article>
+  <span class="date">July 17, 2026 · Agents · Fundamentals</span>
+  <h1 class="display">The agent loop: the pattern under every AI agent</h1>
+
+  <p>People talk about AI agents like they're exotic. In my experience, once you see the loop, the mystery goes away. Strip every framework, SDK, and abstraction away and what's underneath is a <code>while</code> loop that calls a model, checks whether it wants to use a tool, dispatches that tool, feeds the result back, and repeats until the model says it's done or you run out of budget.</p>
+
+  <p>That's it. That's an agent.</p>
+
+  <p>I built <a href="https://github.com/itsmuskanagarwal/effective-agents-lab" rel="noopener">effective-agents-lab</a> specifically to make this visible. The <code>patterns/agent_loop</code> module hand-rolls that loop against the raw Anthropic API — no Claude Agent SDK, no LangChain, no abstraction layer. The implementation is 81 lines of actual logic. Reading it is the fastest way to understand what every SDK in this space is doing under the hood, and to stop feeling like framework magic is required to build something real.</p>
+
+  <h2>The loop in plain terms</h2>
+
+  <p>The loop does three things on each iteration. It calls the model with the current message history and a list of available tools. It reads <code>stop_reason</code> on the response. If <code>stop_reason</code> is not <code>tool_use</code>, the model has given a final answer and the run is done. If it is <code>tool_use</code>, the model wants to call something — so you dispatch the tool, append the result to the message history as a <code>tool_result</code> block, and call the model again.</p>
+
+  <p>The Anthropic playbook describes it this way: "The agent then formulates a plan, executes actions based on available tools, observes the results, and adjusts its approach based on feedback... keeps repeating this cycle until the task is completed or it hits a stopping condition." That description maps exactly onto the code:</p>
+
+<pre>for turn in range(max_turns):
+    resp = call(model=BALANCED, system=SYSTEM_PROMPT,
+                messages=messages, tools=TOOL_SCHEMAS, ...)
+
+    if resp.stop_reason != "tool_use":
+        return Result(output=_text_of(resp), completed=True, ...)
+
+    messages.append(_assistant_block(resp))
+    for tc in _tool_use_blocks(resp):
+        content, is_error = execute(tc.name, tc.input)
+        # append tool_result back as user message
+    messages.append(_tool_results_block(results))</pre>
+
+  <p>Perceive (the model reads the messages), decide (it picks a tool or says done), act (you execute and append). Repeat. The whole thing fits in one screen.</p>
+
+  <h2>The three files and what each one does</h2>
+
+  <p>The module has three files by design. <code>loop.py</code> is the loop itself — just control flow, no business logic. <code>tools.py</code> defines what the model can call: workspace-sandboxed file operations (read, write, list) and a <code>run_python</code> tool, all scoped so the model can't escape a working directory. Every path argument gets resolved and checked against the sandbox root before any file operation runs — that's the <code>WorkspaceEscapeError</code> safety rail, and it's the one piece of the file worth reading closely if you're building your own. <code>prompts.py</code> holds the system prompt, kept separate from the loop logic per the repo's convention that prompts never live inline in control flow.</p>
+
+  <p>That separation matters more than it sounds. When you embed your prompt string inside your loop function, you end up editing code to test prompt changes and editing prompts to fix code bugs. Keeping them in separate files keeps those concerns from bleeding into each other.</p>
+
+  <h2>Failure modes and how the loop handles them</h2>
+
+  <p>Two things can go wrong mid-run, and the loop handles both without crashing. The first is an unknown tool name: if the model asks for <code>delete_everything</code> and that tool doesn't exist, the loop returns an <code>is_error: true</code> result to the model as its next input, and the model can recover. The run doesn't crash; the model gets the error as information and typically either retries with a valid tool or explains what it was trying to do.</p>
+
+  <p>The second is hitting <code>max_turns</code>. Rather than raising an exception, the loop returns whatever partial answer exists with <code>completed: False</code>. You can inspect the step trace to see how far it got. This is deliberate — a crashed run tells you nothing; a partial run with a trace tells you exactly where the model got stuck.</p>
+
+  <p>The test suite in <code>patterns/agent_loop/tests/</code> covers both cases with fabricated SDK responses, so all 206 tests in the repo pass in about 12 seconds without an API key. The limitation is real and stated: model behavior (does the prompt actually work, does the agent actually converge) is unverified without a live API key. The code is tested; the prompt hasn't been. That's an honest distinction worth maintaining in your own projects.</p>
+
+  <h2>When to use a hand-rolled loop</h2>
+
+  <p>Honestly? Mostly for understanding. The point of writing the loop yourself is to see every mechanic: how tool calls become user messages, how errors feed back, how budget tracking fits around the outside. Once you've read it once, you know what the Claude Agent SDK is doing for you when you use it for real work — context management, retries, multi-turn state. You don't have to manage any of that manually.</p>
+
+  <p>There are cases where hand-rolling is the right call in production: unusual sandboxing needs, environments where you can't add dependencies, or a codebase where you need to control every mechanic of tool dispatch. But that's the exception, not the default. <code>agents/research_agent</code> in the same repo does the same job on the real SDK, and the SDK earns its keep.</p>
+
+  <p>The tell for when to avoid a bare loop: if you catch yourself reinventing context management, token truncation, or retry logic, you're doing work the SDK already did. That maintenance cost is real, and this repo pays it deliberately for pedagogy — you shouldn't pay it in production.</p>
+
+  <h2>What changes when you scale up</h2>
+
+  <p>The single-agent loop scales less gracefully than people expect. It works well for open-ended problems where you can't predetermine the steps — "read these files, summarize what you find" is a good fit. It works less well when you need the same answer, right, every time; that calls for the more constrained patterns like chaining or routing. And it breaks down for genuinely complex work that benefits from parallelism or specialization, which is where multi-agent architectures enter.</p>
+
+  <p>But before any of that: read the 81-line loop. Everything else in this space is built on top of it, including the frameworks that hide it from you.</p>
+
+  <div class="cta-box">
+    <strong>See it:</strong> <a href="https://github.com/itsmuskanagarwal/effective-agents-lab/blob/main/patterns/agent_loop/loop.py" rel="noopener">patterns/agent_loop/loop.py</a> in effective-agents-lab. Or start at <a href="https://github.com/itsmuskanagarwal/effective-agents-lab/blob/main/docs/01-agent-loop.md" rel="noopener">docs/01-agent-loop.md</a> for the full chapter with trace walkthrough. More on the patterns this leads to in the <a href="/articles/">articles index</a>.
+  </div>
+</article>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+</body>
+</html>
