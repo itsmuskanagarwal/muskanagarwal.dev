@@ -6,6 +6,13 @@
     <description>Engineering writing by Muskan Agarwal: AI agents, RAG systems, Angular performance, and honest build logs.</description>
     <language>en-us</language>
     <item>
+      <title>The agent loop: the pattern under every AI agent</title>
+      <link>https://muskanagarwal.dev/articles/agent-loop-fundamentals/</link>
+      <guid>https://muskanagarwal.dev/articles/agent-loop-fundamentals/</guid>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Strip every framework away and an AI agent is one loop in 81 lines of Python: call the model, check if it wants a tool, dispatch it, feed the result back, repeat. Here's what that loop actually looks like.</description>
+    </item>
+    <item>
       <title>Demos are not products: auditing my own GitHub</title>
       <link>https://muskanagarwal.dev/articles/demos-are-not-products/</link>
       <guid>https://muskanagarwal.dev/articles/demos-are-not-products/</guid>
