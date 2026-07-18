@@ -26,7 +26,7 @@ const PROJECTS=[
  ["05","Dev Tool","Caveman Local UI","Dev tooling — zero extra dependencies","Built a local-environment version of the caveman repo with a full UI layer, so developers can integrate it into their projects visually.","No additional libraries to install, no setup friction — drop it in and go."],
  ["06","Side Projects","Side Projects Lab","Chatbots · AI tools · Experiments","A running collection of smaller builds: AI-powered chatbots, resume builders with LLM integration, quick automation scripts, and weekend experiments.","These are where I test ideas before they grow into real projects."]
 ];
-const CURATED_REPOS=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","caveman-but-local"];
+const CURATED_REPOS=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","claude-pack","caveman-but-local","caveman-mcp"];
 const REPO_FALLBACK={
  "effective-agents-lab":"Anthropic's 'Building Effective AI Agents' playbook, implemented end to end: 13 pattern/agent modules, an eval harness, and a 13-chapter learning guide.",
  "review-rails":"PR review automation that enforces your team's standards: deterministic checks first, LLM judgment only where rules cannot reach, inside your own CI.",
@@ -36,7 +36,9 @@ const REPO_FALLBACK={
  "agent-pipe":"A small, typed, composable pipeline library for multi-step LLM workflows in TypeScript.",
  "ng-perf-lens":"Chrome DevTools extension + npm agent making Angular change-detection cost visible per component, per cycle, in real time.",
  "professional-message-rewriter":"AI-powered workplace communication assistant — rewrites Slack, email, and Jira messages with the right tone.",
- "caveman-but-local":"Caveman token-saving files that can be dropped into any project locally."
+ "caveman-but-local":"Caveman token-saving files that can be dropped into any project locally.",
+ "claude-pack":"A curated pack of Claude Code artifacts — skills, subagents, slash commands, and hooks — for teams working on large or legacy codebases.",
+ "caveman-mcp":"Claude Code skill that cuts tokens by talking like caveman (forked)."
 };
 const BLUEPRINTS=[
  ["ClauseLens","Legal Ops","Post-signature contract intelligence over your existing repository: renewal and obligation answers with clause-level citations. Reference implementation open-sourced — hybrid retrieval, RRF fusion, citation validation.","live","https://github.com/itsmuskanagarwal/clauselens-rag"],
@@ -46,7 +48,7 @@ const BLUEPRINTS=[
  ["LedgerScope","Financial","Filings + transcripts + credit-agreement intelligence with covenant extraction, for small credit and equity funds.","blueprint",null]
 ];
 const ROADMAP=[
- ["01","Portfolio, live on my own domain","This site — moving from Replit to a permanent home with blog and live demos. You're looking at Phase 1."],
+ ["01","Portfolio, live on my own domain","Shipped: portfolio, projects, RAG demos, and articles live on muskanagarwal.dev. Blog cadence and new demos continue from here."],
  ["02","review-rails v1 on GitHub Marketplace","Tagged release, marketplace listing, dogfooded on my own repositories."],
  ["03","ClauseLens to production spec","Real embeddings, pgvector, and a hosted rate-limited demo you can try right here."],
  ["04","Writing","One deep-dive post per shipped system — architecture decisions, honest benchmarks, what broke."]
@@ -83,14 +85,14 @@ ROADMAP.forEach(([ph,t,d])=>laneEl.appendChild(el(`<div class="lane-item"><div c
 
 /* GitHub repos — live fetch with fallback */
 const rg=document.getElementById('repoGrid');
-function repoCard(name,desc,lang,stars,url){
-  return el(`<a class="repo" href="${url}" target="_blank" rel="noopener"><h3>▣ ${name}</h3><p>${desc||''}</p><div class="meta">${lang?`<span class="lang">${lang}</span>`:''}<span>★ ${stars??0}</span></div></a>`);
+function repoCard(name,desc,lang,stars,url,fork){
+  return el(`<a class="repo" href="${url}" target="_blank" rel="noopener"><h3>▣ ${name}${fork?' <span class="fork-tag">FORK</span>':''}</h3><p>${desc||''}</p><div class="meta">${lang?`<span class="lang">${lang}</span>`:''}${stars?`<span>★ ${stars}</span>`:''}</div></a>`);
 }
 fetch('https://api.github.com/users/itsmuskanagarwal/repos?per_page=100&sort=pushed')
  .then(r=>{if(!r.ok)throw 0;return r.json()})
  .then(repos=>{
    const byName=Object.fromEntries(repos.map(r=>[r.name,r]));
-   CURATED_REPOS.forEach(n=>{const r=byName[n];if(r)rg.appendChild(repoCard(r.name,r.description||REPO_FALLBACK[n],r.language,r.stargazers_count,r.html_url))});
+   CURATED_REPOS.forEach(n=>{const r=byName[n];if(r)rg.appendChild(repoCard(r.name,r.description||REPO_FALLBACK[n],r.language,r.stargazers_count,r.html_url,r.fork))});
    if(!rg.children.length)throw 0;
  })
  .catch(()=>{CURATED_REPOS.forEach(n=>rg.appendChild(repoCard(n,REPO_FALLBACK[n],null,null,`https://github.com/itsmuskanagarwal/${n}`)))});

@@ -35,11 +35,11 @@ const PROJECTS=[
   who:"Angular teams fighting change-detection storms in data-heavy dashboards.",
   next:"Resolve the overhead-measurement methodology gap (documented in SPIKE-RESULTS), then MVP UI.",
   repo:"https://github.com/itsmuskanagarwal/ng-perf-lens"},
- {name:"How to Talk Corporate",stage:["wip","Built · deployment pending"],
-  what:"AI workplace-communication assistant: rewrites Slack/email/Jira messages with the right tone. Web app + browser extension, PII stripping, per-IP rate limits.",
+ {name:"How to Talk Corporate",stage:["shipped","Live · try it now"],
+  what:"AI workplace-communication assistant: rewrites Slack/email/Jira messages with the right tone. Web app + browser extension, PII stripping, 10 free rewrites a day, no login.",
   who:"Professionals who rewrite the same awkward message five times before sending it.",
-  next:"Live deployment with managed keys, then link here — not calling it 'production' until you can click it.",
-  repo:"https://github.com/itsmuskanagarwal/professional-message-rewriter"}
+  next:"Browser extension packaging, then usage-based tone presets.",
+  repo:"https://github.com/itsmuskanagarwal/professional-message-rewriter",demo:"https://professional-message-rewriter-web.vercel.app"}
 ];
 const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
 const pg=document.getElementById('projGrid');
@@ -55,7 +55,7 @@ PROJECTS.forEach(p=>{
 });
 /* live repos */
 const rg=document.getElementById('repoGrid');
-const CURATED=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","caveman-but-local","caveman-mcp"];
+const CURATED=["effective-agents-lab","review-rails","clauselens-rag","memory-matrix","ng-reaper","agent-pipe","ng-perf-lens","professional-message-rewriter","claude-pack","caveman-but-local","caveman-mcp"];
 const REPO_FALLBACK={
  "effective-agents-lab":"Anthropic's 'Building Effective AI Agents' playbook, implemented end to end: 13 pattern/agent modules, an eval harness, and a 13-chapter learning guide.",
  "review-rails":"PR review automation that enforces your team's standards: deterministic checks first, LLM judgment only where rules cannot reach, inside your own CI.",
@@ -64,14 +64,15 @@ const REPO_FALLBACK={
  "ng-reaper":"Find provably dead code in your Angular app — components, templates, services, pipes, NgRx — and delete the safe parts automatically.",
  "agent-pipe":"A small, typed, composable pipeline library for multi-step LLM workflows in TypeScript.",
  "ng-perf-lens":"Chrome DevTools extension + npm agent making Angular change-detection cost visible per component, per cycle, in real time.",
- "professional-message-rewriter":"AI-powered workplace communication assistant — rewrites messages for tone. Deployment in progress.",
+ "professional-message-rewriter":"AI-powered workplace communication assistant — rewrites messages for tone. Live, no login, 10 free rewrites a day.",
  "caveman-but-local":"Caveman token-saving files that can be dropped into any project locally.",
- "caveman-mcp":"Claude Code skill that cuts tokens by talking like caveman (forked)."
+ "caveman-mcp":"Claude Code skill that cuts tokens by talking like caveman (forked).",
+ "claude-pack":"A curated pack of Claude Code artifacts — skills, subagents, slash commands, and hooks — for teams working on large or legacy codebases."
 };
-function card(n,d,l,s,u){return el(`<a class="repo" href="${u}" rel="noopener" target="_blank"><h3>▣ ${n}</h3><p>${d||''}</p><div class="meta">${l?`<span class="lang">${l}</span>`:''}<span>★ ${s??0}</span></div></a>`)}
+function card(n,d,l,s,u,fork){return el(`<a class="repo" href="${u}" rel="noopener" target="_blank"><h3>▣ ${n}${fork?' <span class="fork-tag">FORK</span>':''}</h3><p>${d||''}</p><div class="meta">${l?`<span class="lang">${l}</span>`:''}${s?`<span>★ ${s}</span>`:''}</div></a>`)}
 fetch('https://api.github.com/users/itsmuskanagarwal/repos?per_page=100&sort=pushed')
  .then(r=>{if(!r.ok)throw 0;return r.json()})
  .then(rs=>{const by=Object.fromEntries(rs.map(r=>[r.name,r]));
-   CURATED.forEach(n=>{const r=by[n];if(r)rg.appendChild(card(r.name,r.description||REPO_FALLBACK[n],r.language,r.stargazers_count,r.html_url))});
+   CURATED.forEach(n=>{const r=by[n];if(r)rg.appendChild(card(r.name,r.description||REPO_FALLBACK[n],r.language,r.stargazers_count,r.html_url,r.fork))});
    if(!rg.children.length)throw 0})
  .catch(()=>CURATED.forEach(n=>rg.appendChild(card(n,'View on GitHub',null,null,`https://github.com/itsmuskanagarwal/${n}`))));
