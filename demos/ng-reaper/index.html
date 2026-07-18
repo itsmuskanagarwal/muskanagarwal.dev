@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ng-reaper — Watch It Find Dead Angular Code | Muskan Agarwal</title>
+<meta name="description" content="Watch ng-reaper scan real Angular fixtures for dead components, pipes, services, and NgRx artifacts, explain its confidence tiers, and preview a safe delete. Real recorded CLI output, not a mockup.">
+<link rel="canonical" href="https://muskanagarwal.dev/demos/ng-reaper/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ng-reaper — Watch It Find Dead Angular Code">
+<meta property="og:description" content="Real recorded runs of the actual CLI against real fixtures: scan, explain, and a safe-delete dry run.">
+<meta property="og:url" content="https://muskanagarwal.dev/demos/ng-reaper/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"ng-reaper",
+"codeRepository":"https://github.com/itsmuskanagarwal/ng-reaper","programmingLanguage":"TypeScript",
+"author":{"@type":"Person","name":"Muskan Agarwal"},
+"description":"Finds provably dead code in Angular applications — components, templates, services, and NgRx artifacts — and deletes the safe parts automatically."}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .demo-wrap{max-width:1050px;margin:56px auto 0;text-align:left}
+  .term{background:#101014;border:2px solid rgba(233,179,59,.5);border-radius:18px;overflow:hidden;box-shadow:10px 12px 0 rgba(0,0,0,.5)}
+  .term-top{display:flex;align-items:center;gap:8px;background:#1B1B21;padding:12px 18px;border-bottom:1.5px solid rgba(233,179,59,.3)}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .term-top .t{margin-left:10px;color:var(--muted-l);font-size:.78rem;font-weight:700;letter-spacing:.08em}
+  .term-body{padding:26px 28px;min-height:480px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;line-height:1.65;color:#D8D3C8;overflow-x:auto}
+  .prompt-line{margin:16px 0 4px;color:#7FB4E8;font-weight:700}
+  .prompt-line:first-child{margin-top:0}
+  .prompt-sym{color:var(--gold)}
+  .prompt-cwd{color:#8FCE9B}
+  .prompt-cmd{color:#F0EAD8}
+  .out-block{white-space:pre-wrap;color:#C9C4BA;margin:0 0 4px;font-family:inherit;font-size:inherit}
+  .tier-safe{color:#8FCE9B;font-weight:700}
+  .tier-likely{color:var(--gold);font-weight:700}
+  .tier-suspect{color:#E5604C;font-weight:700}
+  .hdr{color:var(--gold);font-weight:700}
+  .dryrun-tag{color:#7FB4E8;font-weight:700}
+  .caret{display:inline-block;width:8px;height:15px;background:var(--gold);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .demo-controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;justify-content:center}
+  .nrbtn{background:var(--ink-2);border:2px solid rgba(233,179,59,.45);color:var(--cream);border-radius:999px;padding:10px 20px;font-weight:700;font-size:.85rem;cursor:pointer;transition:border-color .15s,transform .15s;font-family:'Manrope'}
+  .nrbtn:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .nrbtn.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .honesty{max-width:1050px;margin:26px auto 0;text-align:left;background:rgba(233,179,59,.07);border:1.5px solid rgba(233,179,59,.35);border-radius:14px;padding:18px 22px;color:var(--muted-l);font-size:.88rem}
+  .honesty b{color:var(--gold)}
+  .tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1100px;margin:50px auto 0;text-align:left}
+</style>
+</head>
+<body class="section-dark">
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section dark-paper center">
+  <span class="kicker">Live replay · Real CLI output</span>
+  <h1 class="display sec-title">Watch ng-reaper Find Dead Code</h1>
+  <p class="sec-sub" style="max-width:660px;margin:0 auto">Scan, explain, and a safe-delete dry run — against three real Angular fixtures from the repo's own test suite. Every line below is real <code>dist/cli.js</code> stdout.</p>
+
+  <div class="demo-wrap">
+    <div class="term" role="region" aria-label="ng-reaper demo">
+      <div class="term-top">
+        <span class="dot" style="background:#E5604C"></span><span class="dot" style="background:#E9B33B"></span><span class="dot" style="background:#8FCE9B"></span>
+        <span class="t">ng-reaper · CLI replay · fixtures/</span>
+      </div>
+      <div class="term-body" id="nrBody" aria-live="polite"></div>
+    </div>
+    <div class="demo-controls" id="nrButtons"></div>
+  </div>
+
+  <div class="honesty">
+    <b>What you're watching, honestly:</b> these are real terminal sessions —
+    <code>npm run build</code> compiling the actual TypeScript, then <code>node dist/cli.js</code>
+    run against three fixtures inside <a href="https://github.com/itsmuskanagarwal/ng-reaper" rel="noopener" style="color:var(--gold)">ng-reaper</a>'s
+    own test suite (<code>fixtures/standalone-app</code>, <code>fixtures/ngrx-store</code>, <code>fixtures/suspect-dynamic</code>).
+    <code>--fix --dry-run</code> only ever prints a deletion plan; it never touches a file — that's
+    the same safety rail the real tool enforces on your codebase. Clone the repo and run
+    <code>npm run build && node dist/cli.js</code> inside any fixture to get the same output.
+  </div>
+
+  <section class="center" style="margin-top:70px">
+    <span class="kicker">Confidence tiers</span>
+    <h2 class="display sec-title" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">No scores, no ML — every tier is explainable</h2>
+    <div class="tier-grid">
+      <div class="card-dark"><h3 style="color:#8FCE9B;font-size:1rem">SAFE</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">No references found anywhere in the workspace. Auto-deletable with <code>--fix</code> — the only tier that is.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">LIKELY</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">No static references, but a pattern exists that could resolve dynamically (e.g. <code>providedIn:'root'</code> + possible <code>Injector.get</code>). Flagged, never auto-fixed.</p></div>
+      <div class="card-dark"><h3 style="color:#E5604C;font-size:1rem">SUSPECT</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">Referenced only through a dynamic pattern ng-reaper can't fully verify. Surfaced for a human to check, never touched automatically.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a></span>
+  <span><a href="https://github.com/itsmuskanagarwal/ng-reaper" rel="noopener">ng-reaper on GitHub</a></span>
+</footer>
+
+<script src="/assets/ng-reaper-demo.js" defer></script>
+</body>
+</html>
