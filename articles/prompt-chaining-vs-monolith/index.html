@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt chaining vs one big prompt: when decomposition wins — Muskan Agarwal</title>
+<meta name="description" content="When does breaking a task into sequential LLM calls beat one big prompt? The case for chaining, the gate that makes it work, and when it just adds latency.">
+<link rel="canonical" href="https://muskanagarwal.dev/articles/prompt-chaining-vs-monolith/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prompt chaining vs one big prompt: when decomposition wins">
+<meta property="og:description" content="When does breaking a task into sequential LLM calls beat one big prompt? The case for chaining, the gate that makes it work, and when it just adds latency.">
+<meta property="og:url" content="https://muskanagarwal.dev/articles/prompt-chaining-vs-monolith/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"Prompt chaining vs one big prompt: when decomposition wins",
+"datePublished":"2026-07-18","dateModified":"2026-07-18",
+"author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
+"mainEntityOfPage":"https://muskanagarwal.dev/articles/prompt-chaining-vs-monolith/"}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  article{max-width:760px;margin:0 auto;text-align:left}
+  article .date{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  article h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 26px}
+  article h2{font-size:1.35rem;margin:38px 0 12px;font-family:'Archivo Black';text-transform:uppercase}
+  article p{margin-bottom:18px;font-size:1.02rem}
+  article code{background:var(--cream-2);border:1px solid rgba(23,23,27,.2);border-radius:6px;padding:1px 6px;font-size:.88em}
+  article pre{background:#101014;color:#D8D3C8;border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:.84rem;line-height:1.6;margin-bottom:18px;border:2px solid rgba(233,179,59,.35)}
+  .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
+  .cta-box a{color:var(--gold);font-weight:800}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/" aria-current="page">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section grid-paper">
+<article>
+  <span class="date">July 18, 2026 · LLM Patterns · effective-agents-lab</span>
+  <h1 class="display">Prompt chaining vs one big prompt: when decomposition wins</h1>
+
+  <p>The default move when you want an LLM to do something complex is to write one very long prompt and hope the model holds it all together. Sometimes that's fine. But there's a class of tasks where breaking the work into sequential steps — each smaller, each verifiable before you pay for the next — is clearly the better engineering choice. The harder question is knowing which situation you're in.</p>
+
+  <p>This is my working answer, built from implementing the prompt chaining pattern in <a href="https://github.com/itsmuskanagarwal/effective-agents-lab">effective-agents-lab</a>. The <code>patterns/chaining</code> module is a six-stage content pipeline — outline, gate, draft, style, optional translate — and the design choices in it make the tradeoffs legible in a way that theory doesn't.</p>
+
+  <h2>What chaining actually is</h2>
+
+  <p>Prompt chaining is sequential: each LLM call takes the output of the previous one as input, and you move through defined stages in one direction. The playbook definition is "decomposing a task into a sequence of steps, where each LLM call processes the output of the previous one." That sounds obvious, but it undersells the key design choice: what you put between the steps.</p>
+
+  <p>A chain without gates is just a pipeline with extra API calls. The part that makes chaining worth choosing is the <em>deterministic check</em> inserted between stages — a piece of code (not another LLM call) that inspects the current step's output before allowing the next step to start. In <code>patterns/chaining</code>, the outline stage produces a structured Pydantic model, not free text, specifically so the gate can programmatically inspect it: section count, required-topic coverage, whether the structure is actually usable. If the gate fails, it feeds the failure reasons back into a second outline attempt. Two failed attempts raises <code>GateFailed</code> rather than looping forever. That's it — that's the pattern.</p>
+
+  <h2>The gate is the whole point</h2>
+
+  <p>Consider the alternative: ask for a finished draft in one prompt and hope it's structured well, covers the right topics, and is appropriately scoped. If it isn't, you've spent draft-sized money to learn that. With chaining, you spend outline-sized money first, verify, and only advance to draft if the structure passes. The outline costs a fraction of the draft — both in tokens and in model tier. In <code>patterns/chaining</code>, the outline and gate steps run on the FAST model; the draft and style steps run on BALANCED. That difference shows up in the trace as a cost difference, which is model-matching made visible rather than just theoretical.</p>
+
+  <p>There's also an auditability argument. The pipeline's docstring cites "clear audit trails and deterministic behavior... well-suited for regulatory environments" as a property of sequential workflows with programmatic gates. When you can see exactly what the gate rejected, on what grounds, and what retry produced — that's a different class of system than one where you send a big prompt and interpret a big response.</p>
+
+  <h2>When a monolith beats chaining</h2>
+
+  <p>Chaining adds latency. Each step is a round-trip, and a six-stage pipeline is six sequential calls where a single prompt is one. If the task is simple enough that one call handles it well, or if you can't define a cheap verification point between stages, you're paying latency costs without getting the benefit. The docs put it directly: "avoid it when steps don't have a clear, cheap verification point in between — at that point you're just adding latency and cost for a chain that can't actually catch its own mistakes."</p>
+
+  <p>The version of this I find most useful: chaining is worth it when the cost of a bad stage-N output, if uncaught, is larger than the cost of an extra round-trip. For draft-quality content, that's usually true — a poorly structured outline poisons everything downstream. For a simple classification or a short factual question, it's usually not true — one call is fine.</p>
+
+  <p>The other case where chaining degrades is when stages need to <em>collaborate rather than hand off</em>. Sequential workflows have linear dependencies: step N produces something, step N+1 consumes it, done. If your problem requires backtracking — "given the draft, revise the outline, then re-draft" — a sequential chain can implement that, but you're working against the grain of the pattern. That's the shape of an evaluator-optimizer loop (chapter 8), not a linear chain.</p>
+
+  <h2>Honest notes on the eval numbers</h2>
+
+  <p>The calendar row for this article says "use EAL's eval harness results." I'm going to be honest about what those are: <code>evals/</code> exists and has real benchmark infrastructure, but no suite has run against actual models yet — the repo was built without a live API key. The module status table says so explicitly. So I have code-level evidence of the design (the pipeline structure, the cost model, the gate mechanics) but not live measurements of, say, how often the gate fires on real inputs or how much a <code>--cheap</code> run diverges in quality from a <code>BALANCED</code> run on the same topic.</p>
+
+  <p>What I can say from the offline tests: the pipeline is structured to make those measurements easy to take. Run it yourself with <code>RUN_LIVE_TESTS=1 python -m pytest -m live</code> once you have an API key, compare <code>--cheap</code> traces against <code>BALANCED</code> ones on the same topic, and the cost difference will be real and visible in the trace's <code>total_cost_usd</code>.</p>
+
+  <h2>The pattern in practice</h2>
+
+  <p>Running the chaining module looks like this:</p>
+
+<pre>python -m patterns.chaining "the tradeoffs between REST and gRPC for a new internal service"
+# Expected: DONE ($0.03xx, 6 stages)
+# Two extra stage events appear if the first outline fails the gate</pre>
+
+  <p>The <code>$0.03xx</code> figure is from the README's expected output for a full BALANCED run. The six stages are: outline, gate, draft, style, and optionally translate — two light FAST calls followed by two heavier BALANCED calls. That ordering isn't arbitrary; you want the cheap verification to happen before you spend on the expensive work.</p>
+
+  <p>Whether to chain a given task comes down to one question: can I define a cheap, deterministic check between the first step and the expensive second step? If yes, chaining is probably worth it. If the check would itself require another LLM call to perform, you've negated half the benefit. If there's no natural break point at all, one well-constructed prompt is probably cleaner.</p>
+
+  <div class="cta-box">
+    <strong>See the code:</strong> <a href="https://github.com/itsmuskanagarwal/effective-agents-lab/tree/main/patterns/chaining" rel="noopener">patterns/chaining</a> in effective-agents-lab — the full six-stage pipeline, gate logic, and offline test suite. Or read the <a href="/articles/">full series</a> starting from the agent loop.
+  </div>
+</article>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
+</footer>
+</body>
+</html>
