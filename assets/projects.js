@@ -4,7 +4,7 @@ const PROJECTS=[
   what:"PR review automation for GitHub Actions: your team's standards become executable rules; an LLM is consulted only where regex can't judge.",
   who:"Engineering teams whose review standards live in a wiki nobody reads. Enterprises that can't send code to review SaaS.",
   next:"v1 tag, GitHub Marketplace listing, dogfooding on all my own repos.",
-  repo:"https://github.com/itsmuskanagarwal/review-rails"},
+  repo:"https://github.com/itsmuskanagarwal/review-rails",demo:"/demos/review-rails/"},
  {name:"clauselens-rag",stage:["shipped","Reference build · open source"],
   what:"Hybrid-retrieval RAG for contract intelligence: structural chunking, BM25 + dense fusion, citation-validated answers. 90.7% retrieval on a 43-question golden set.",
   who:"Anyone building retrieval over legal or structured documents; teams who want a RAG pipeline without agent-framework overhead.",
