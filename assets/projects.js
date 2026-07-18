@@ -24,7 +24,7 @@ const PROJECTS=[
   what:"Finds provably dead code in Angular apps — components, templates, services, pipes, NgRx — and deletes the safe parts automatically.",
   who:"Teams with years-old Angular codebases carrying dead weight through every build and every onboarding.",
   next:"Wider fixture coverage, npx one-shot mode polish.",
-  repo:"https://github.com/itsmuskanagarwal/ng-reaper"},
+  repo:"https://github.com/itsmuskanagarwal/ng-reaper",demo:"/demos/ng-reaper/"},
  {name:"agent-pipe",stage:["beta","Usable · API stabilizing"],
   what:"A small, typed, composable pipeline library for multi-step LLM workflows in TypeScript. No framework, no magic — just typed steps.",
   who:"TypeScript developers who want LLM workflow structure without adopting a heavyweight agent framework.",
