@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>review-rails — Watch a Real PR Review Run | Muskan Agarwal</title>
+<meta name="description" content="Watch review-rails, a PR review automation tool, review three real pull requests: a clean one, one that trips every deterministic rule, and one that escalates to an LLM judgment call. Real recorded engine output, not a mockup.">
+<link rel="canonical" href="https://muskanagarwal.dev/demos/review-rails/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="review-rails — Watch a Real PR Review Run">
+<meta property="og:description" content="Real recorded runs of the actual rule engine: a clean PR, a PR with violations, and one that escalates to an LLM judgment call.">
+<meta property="og:url" content="https://muskanagarwal.dev/demos/review-rails/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"review-rails",
+"codeRepository":"https://github.com/itsmuskanagarwal/review-rails","programmingLanguage":"TypeScript",
+"author":{"@type":"Person","name":"Muskan Agarwal"},
+"description":"PR review automation that enforces a team's standards: deterministic checks first, LLM judgment only where rules cannot reach."}
+</script>
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .demo-wrap{max-width:1050px;margin:56px auto 0;text-align:left}
+  .pr-shell{background:#101014;border:2px solid rgba(233,179,59,.5);border-radius:18px;overflow:hidden;box-shadow:10px 12px 0 rgba(0,0,0,.5)}
+  .pr-shell-top{display:flex;align-items:center;gap:8px;background:#1B1B21;padding:12px 18px;border-bottom:1.5px solid rgba(233,179,59,.3)}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .pr-shell-top .t{margin-left:10px;color:var(--muted-l);font-size:.78rem;font-weight:700;letter-spacing:.08em}
+  .pr-stage{padding:26px 28px;min-height:360px;color:#D8D3C8;font-size:.92rem}
+  .pr-head{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+  .pr-title{color:var(--gold);font-weight:700;margin-bottom:6px}
+  .pr-files{color:#8FCE9B}
+  .pr-files code{background:#181820;padding:2px 6px;border-radius:5px;margin-right:6px;font-size:.78rem}
+  .run-line{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;color:#7FB4E8;margin-top:14px}
+  .gh-comment{margin-top:20px;background:#181820;border:1.5px solid rgba(233,179,59,.3);border-radius:12px;overflow:hidden}
+  .gh-comment-head{display:flex;align-items:center;gap:10px;background:#1F1F27;padding:12px 16px;font-size:.85rem;border-bottom:1px solid rgba(233,179,59,.2)}
+  .bot-avatar{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--gold);color:var(--ink);border-radius:6px;font-weight:800}
+  .chip{display:inline-block;margin-left:10px;font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:none}
+  .chip-block{background:rgba(229,96,76,.18);color:#F0998A;border:1px solid rgba(229,96,76,.5)}
+  .chip-warn{background:rgba(233,179,59,.18);color:var(--gold);border:1px solid rgba(233,179,59,.5)}
+  .chip-ok{background:rgba(143,206,155,.18);color:#8FCE9B;border:1px solid rgba(143,206,155,.5)}
+  .gh-comment-body{padding:16px 18px;font-size:.88rem;line-height:1.6}
+  .gh-comment-body .intro{color:#B9B4A9;margin-bottom:10px}
+  .comment-section{margin:14px 0}
+  .comment-section h4{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;color:#C9C4BA}
+  .finding-row{background:#101014;border-left:3px solid var(--muted-l);border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px}
+  .sev-block .finding-row{border-left-color:#E5604C}
+  .sev-warn .finding-row{border-left-color:var(--gold)}
+  .sev-note .finding-row{border-left-color:#7FB4E8}
+  .finding-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.8rem;margin-bottom:3px}
+  .rule-id{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(233,179,59,.15);color:var(--gold);border:1px solid rgba(233,179,59,.4);border-radius:5px;padding:1px 7px;font-size:.74rem}
+  .rule-id.ok{background:rgba(143,206,155,.15);color:#8FCE9B;border-color:rgba(143,206,155,.4)}
+  .finding-head code{color:#9AD1E0;font-size:.76rem}
+  .src-tag{font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:1px 7px;border-radius:999px;margin-left:auto}
+  .src-tag.det{background:rgba(255,255,255,.06);color:var(--muted-l)}
+  .src-tag.llm{background:rgba(127,180,232,.18);color:#7FB4E8;border:1px solid rgba(127,180,232,.4)}
+  .finding-msg{color:#C9C4BA;font-size:.85rem}
+  .passed-row{color:#8FCE9B;font-size:.85rem;margin-bottom:5px}
+  .raw-md{margin-top:14px}
+  .raw-md summary{cursor:pointer;color:var(--muted-l);font-size:.78rem;font-weight:700}
+  .raw-md pre{background:#0C0C10;border:1px solid rgba(233,179,59,.25);border-radius:8px;padding:14px;margin-top:8px;font-size:.72rem;white-space:pre-wrap;color:#B9B4A9;overflow-x:auto}
+  .demo-controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;justify-content:center}
+  .rrbtn{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--ink-2);border:2px solid rgba(233,179,59,.45);color:var(--cream);border-radius:16px;padding:10px 20px;font-weight:700;font-size:.85rem;cursor:pointer;transition:border-color .15s,transform .15s;font-family:'Manrope'}
+  .rrbtn:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .rrbtn.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .rrbtn-sub{font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;opacity:.75}
+  .honesty{max-width:1050px;margin:26px auto 0;text-align:left;background:rgba(233,179,59,.07);border:1.5px solid rgba(233,179,59,.35);border-radius:14px;padding:18px 22px;color:var(--muted-l);font-size:.88rem}
+  .honesty b{color:var(--gold)}
+  .rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:1200px;margin:50px auto 0;text-align:left}
+</style>
+</head>
+<body class="section-dark">
+
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="/">MUSKAN.A</a>
+  <div class="links">
+    <a href="/portfolio/">Portfolio</a><a href="/projects/">Projects</a><a href="/systems/">RAG Systems</a>
+    <a href="/articles/">Articles</a><a href="/plans/">What's Next</a>
+    <a href="https://github.com/itsmuskanagarwal" rel="noopener" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+<div class="nav-pad"></div>
+
+<main class="section dark-paper center">
+  <span class="kicker">Live replay · Real engine output</span>
+  <h1 class="display sec-title">Watch review-rails Review a PR</h1>
+  <p class="sec-sub" style="max-width:660px;margin:0 auto">Deterministic rules run first and run free. An LLM is consulted only for the judgment calls a regex can't make, under a hard token budget. Pick a PR below — these are real outputs from the actual rule engine.</p>
+
+  <div class="demo-wrap">
+    <div class="pr-shell" role="region" aria-label="review-rails demo">
+      <div class="pr-shell-top">
+        <span class="dot" style="background:#E5604C"></span><span class="dot" style="background:#E9B33B"></span><span class="dot" style="background:#8FCE9B"></span>
+        <span class="t">review-rails · PR review replay · config: examples/standards.starter.yml</span>
+      </div>
+      <div class="pr-stage" id="rrStage" aria-live="polite"></div>
+    </div>
+    <div class="demo-controls" id="rrButtons"></div>
+  </div>
+
+  <div class="honesty">
+    <b>What you're watching, honestly:</b> each scenario is a real <code>PullRequestContext</code>
+    (two are the repo's own golden-PR test fixtures) run through the actual
+    <a href="https://github.com/itsmuskanagarwal/review-rails" rel="noopener" style="color:var(--gold)">review-rails</a>
+    rule engine and comment builder. The "LLM judgment tier" scenario's model
+    response is played back through the project's own <code>RecordedProvider</code>,
+    using the same fixture (<code>valid-findings.json</code>) its real unit tests assert
+    against — so nothing here is hand-written copy dressed up as a demo. Clone the
+    repo and run <code>npm test</code> to see the same engine produce the same findings.
+  </div>
+
+  <section class="center" style="margin-top:70px">
+    <span class="kicker">The five deterministic rule types</span>
+    <h2 class="display sec-title" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">What runs before any model does</h2>
+    <div class="rules-grid">
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">forbidden-pattern</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">Regex against added lines, optionally scoped by path glob. Catches things like stray <code>console.log</code>.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">required-pairing</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">If a file matching one glob changes, a file matching another must change too — e.g. src changes require test changes.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">size-budget</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">Caps lines-per-file and/or files-per-PR, with label-based overrides for legitimate large changes.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">path-policy</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">Restricts sensitive paths to allowed authors/teams; denies symlink tricks into protected paths by default.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">commit-format</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">Enforces a commit-message regex, e.g. Conventional Commits.</p></div>
+      <div class="card-dark"><h3 style="color:var(--gold);font-size:1rem">judgment (LLM-only)</h3><p style="color:#C9C4BA;font-size:.88rem;margin-top:6px">No deterministic backing — a rubric routed to the LLM pass, budgeted and schema-validated, dropped entirely rather than posted if it fails validation twice.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <b>Muskan Agarwal</b>
+  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a></span>
+  <span><a href="https://github.com/itsmuskanagarwal/review-rails" rel="noopener">review-rails on GitHub</a></span>
+</footer>
+
+<script src="/assets/review-rails-demo.js" defer></script>
+</body>
+</html>
