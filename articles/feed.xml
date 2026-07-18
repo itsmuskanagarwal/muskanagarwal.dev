@@ -6,6 +6,13 @@
     <description>Engineering writing by Muskan Agarwal: AI agents, RAG systems, Angular performance, and honest build logs.</description>
     <language>en-us</language>
     <item>
+      <title>Prompt chaining vs one big prompt: when decomposition wins</title>
+      <link>https://muskanagarwal.dev/articles/prompt-chaining-vs-monolith/</link>
+      <guid>https://muskanagarwal.dev/articles/prompt-chaining-vs-monolith/</guid>
+      <pubDate>Sat, 18 Jul 2026 00:00:00 GMT</pubDate>
+      <description>When does breaking a task into sequential LLM calls beat one big prompt? The case for chaining, the gate that makes it work, and when it just adds latency.</description>
+    </item>
+    <item>
       <title>The agent loop: the pattern under every AI agent</title>
       <link>https://muskanagarwal.dev/articles/agent-loop-fundamentals/</link>
       <guid>https://muskanagarwal.dev/articles/agent-loop-fundamentals/</guid>
