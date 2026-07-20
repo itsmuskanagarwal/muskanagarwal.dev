@@ -17,15 +17,21 @@
 "sameAs":["https://github.com/itsmuskanagarwal","https://linkedin.com/in/itsmuskanagarwal","https://medium.com/@developerwhoismean"],
 "knowsAbout":["Angular","TypeScript","AI Agents","Retrieval-Augmented Generation","Node.js"]}
 </script>
-<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
-<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og/home.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og/home.png">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="alternate" type="application/rss+xml" title="Muskan Agarwal — Articles" href="/articles/feed.xml">
 <style>
+  .try-it{max-width:900px;margin:64px auto 0;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:22px;box-shadow:9px 10px 0 rgba(23,23,27,.9);padding:34px 30px;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+  .try-it .ti-body{flex:1;min-width:240px}
+  .try-it h3{font-family:'Archivo Black';text-transform:uppercase;font-size:1.15rem;margin-bottom:8px}
+  .try-it p{color:var(--muted);font-size:.92rem}
+  .try-it .ti-meta{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:6px}
   .hero3d{position:relative;min-height:100vh;background:var(--ink);overflow:hidden;display:flex;align-items:center;justify-content:center}
   #bg3d{position:absolute;inset:0;width:100%;height:100%;z-index:1}
   .hero-inner{position:relative;z-index:2;text-align:center;padding:0 5vw;pointer-events:none}
@@ -113,18 +119,40 @@
     </a>
   </div>
 
+  <div class="try-it">
+    <div class="ti-body">
+      <div class="ti-meta">Shipped · live at a URL</div>
+      <h3>Try something I built — right now</h3>
+      <p>"How to Talk Corporate" — workplace communication, calibrated. Paste a draft, pick a tone, get it rewritten. 10 free rewrites a day, no login, message content never stored.</p>
+    </div>
+    <a class="btn" href="https://professional-message-rewriter-web.vercel.app" target="_blank" rel="noopener">Use it — free, no login</a>
+  </div>
+
   <div class="stats">
-    <div class="stat"><div class="n">10+</div><div class="l">Public repos</div></div>
+    <div class="stat"><div class="n" data-stat="public-repos">14</div><div class="l">Public repos</div></div>
     <div class="stat"><div class="n">90.7%</div><div class="l">ClauseLens retrieval hit-rate</div></div>
     <div class="stat"><div class="n">206</div><div class="l">Tests in effective-agents-lab</div></div>
     <div class="stat"><div class="n">2×</div><div class="l">Gold medalist (MCA, AI &amp; DS)</div></div>
   </div>
 </main>
 
+<section class="newsletter-cta">
+  <div class="newsletter-inner">
+    <h2>One email when something ships.</h2>
+    <p>Near-daily writing, monthly-ish shipping. No noise.</p>
+    <form action="https://buttondown.com/api/emails/embed-subscribe/muskanagarwal" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/muskanagarwal','popupwindow')" class="newsletter-form">
+      <label for="bd-email" class="sr-only">Email address</label>
+      <input type="email" name="email" id="bd-email" placeholder="you@email.com" required>
+      <input type="hidden" value="1" name="embed">
+      <button type="submit" class="btn">Subscribe</button>
+    </form>
+  </div>
+</section>
+
 <footer class="site-footer">
   <b>Muskan Agarwal</b>
   <span>Frontend Engineer who ships full-stack</span>
-  <span><a href="mailto:hello@muskanagarwal.dev">Email</a> · <a href="https://github.com/itsmuskanagarwal" rel="noopener">GitHub</a> · <a href="https://linkedin.com/in/itsmuskanagarwal" rel="noopener">LinkedIn</a> · <a href="https://medium.com/@developerwhoismean" rel="noopener">Medium</a></span>
+  <span><a href="mailto:hello@muskanagarwal.dev">Email</a> · <a href="https://github.com/itsmuskanagarwal" rel="noopener">GitHub</a> · <a href="https://linkedin.com/in/itsmuskanagarwal" rel="noopener">LinkedIn</a> · <a href="https://medium.com/@developerwhoismean" rel="noopener">Medium</a> · <a href="/articles/feed.xml">RSS</a></span>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
