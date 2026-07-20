@@ -17,8 +17,8 @@
 "author":{"@type":"Person","name":"Muskan Agarwal","url":"https://muskanagarwal.dev/"},
 "mainEntityOfPage":"https://muskanagarwal.dev/articles/building-clauselens-rag/"}
 </script>
-<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
-<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og/article-building-clauselens-rag.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og/article-building-clauselens-rag.png">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,7 @@
   .cta-box{background:var(--ink);color:var(--cream);border-radius:16px;padding:24px 28px;margin-top:40px}
   .cta-box a{color:var(--gold);font-weight:800}
 </style>
+<link rel="alternate" type="application/rss+xml" title="Muskan Agarwal — Articles" href="/articles/feed.xml">
 </head>
 <body>
 <nav class="site-nav" aria-label="Main">
@@ -82,9 +83,22 @@ synthesis:  citation-validated, extractive fallback without a key</pre>
 </article>
 </main>
 
+<section class="newsletter-cta">
+  <div class="newsletter-inner">
+    <h2>One email when something ships.</h2>
+    <p>Near-daily writing, monthly-ish shipping. No noise.</p>
+    <form action="https://buttondown.com/api/emails/embed-subscribe/muskanagarwal" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/muskanagarwal','popupwindow')" class="newsletter-form">
+      <label for="bd-email" class="sr-only">Email address</label>
+      <input type="email" name="email" id="bd-email" placeholder="you@email.com" required>
+      <input type="hidden" value="1" name="embed">
+      <button type="submit" class="btn">Subscribe</button>
+    </form>
+  </div>
+</section>
+
 <footer class="site-footer">
   <b>Muskan Agarwal</b>
-  <span><a href="/articles/">← All articles</a></span>
+  <span><a href="/articles/">← All articles</a> · <a href="/articles/feed.xml">RSS</a></span>
   <span><a href="mailto:hello@muskanagarwal.dev">hello@muskanagarwal.dev</a></span>
 </footer>
 </body>
