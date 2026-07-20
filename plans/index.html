@@ -10,25 +10,74 @@
 <meta property="og:title" content="What's Next — Muskan Agarwal's public roadmap">
 <meta property="og:description" content="Products in progress, blueprints queued, sequencing logic. Updated as things ship.">
 <meta property="og:url" content="https://muskanagarwal.dev/plans/">
-<meta property="og:image" content="https://muskanagarwal.dev/assets/og.png">
-<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og.png">
+<meta property="og:image" content="https://muskanagarwal.dev/assets/og/plans.png">
+<meta name="twitter:image" content="https://muskanagarwal.dev/assets/og/plans.png">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="alternate" type="application/rss+xml" title="Muskan Agarwal — Articles" href="/articles/feed.xml">
 <style>
   .queue{max-width:900px;margin:56px auto 0;text-align:left;display:flex;flex-direction:column;gap:20px}
   .q-item{display:flex;gap:24px;align-items:flex-start}
   .q-item .ph{font-family:'Archivo Black';color:var(--gold);font-size:1.6rem;min-width:76px;padding-top:18px}
-  .q-item .card-dark{flex:1}
+  .q-item .card-dark{flex:1;position:relative;overflow:hidden;transition:filter .25s}
   .q-item h3{color:var(--cream);font-size:1.1rem;margin-bottom:4px}
   .q-item .when{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
   .q-item .when.shipped{color:#8FCE9B}
   .q-item p{font-size:.92rem;color:#C9C4BA}
+  .q-item .q-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .q-item .q-head .when{margin-bottom:0}
+  .q-item .q-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .q-item .freshness{font-size:.72rem;color:var(--muted-l);opacity:.8}
+
+  /* staleness states — CSS only, filter/pseudo-element, no canvas */
+  .q-item.stale-mid .card-dark{filter:saturate(.75)}
+  .q-item.stale-mid .card-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:46px;background:linear-gradient(to bottom,rgba(201,196,186,.16),transparent);pointer-events:none}
+  .q-item.stale-high .card-dark{filter:saturate(.45) sepia(.35)}
+  .q-item.stale-high .card-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:64px;background:linear-gradient(to bottom,rgba(201,196,186,.26),transparent);pointer-events:none}
+  .stale-badge{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--gold);padding:3px 10px;border-radius:999px}
+  .stale-badge-mid{background:transparent;color:var(--muted-l);border:1.5px solid rgba(233,179,59,.4)}
+  .ask-btn{font-size:.78rem;font-weight:800;color:var(--gold);text-decoration:none;border-bottom:1.5px solid rgba(233,179,59,.5);transition:border-color .2s}
+  .ask-btn:hover{border-color:var(--gold)}
+
+  /* shipped items: subtle shine sweep on hover instead of desaturation */
+  .q-item.shipped .card-dark{position:relative}
+  .q-item.shipped .card-dark::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(233,179,59,.16),transparent);transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
+  .q-item.shipped .card-dark:hover::after{left:120%}
+
   .principle{max-width:900px;margin:70px auto 0;text-align:left}
   .principle .card-dark{border-color:var(--gold)}
+
+  /* time machine scrubber */
+  .rewind{max-width:900px;margin:0 auto 40px;text-align:left}
+  .rewind-label{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-l);margin-bottom:10px;display:block}
+  .rewind input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer}
+  .rewind-ticks{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted-l);margin-top:6px;opacity:.75}
+  .rewind-banner{margin-top:14px;padding:12px 16px;border-radius:12px;border:1.5px dashed rgba(233,179,59,.5);color:var(--cream);font-size:.85rem;background:rgba(233,179,59,.06)}
+  .rewind-banner[hidden]{display:none}
+  main.rewind-active{position:relative}
+  main.rewind-active::before{content:"";position:fixed;inset:0;pointer-events:none;background:rgba(140,110,50,.06);mix-blend-mode:multiply;z-index:0;transition:opacity .3s}
+  main.rewind-active-instant::before{transition:none}
+
+  /* reuse graph section */
+  .reuse-section{max-width:1000px;margin:80px auto 0;text-align:left}
+  .reuse-section h2{color:var(--cream);font-size:1.5rem;margin-bottom:8px}
+  .reuse-section .sub{color:#C9C4BA;font-size:.92rem;max-width:680px;margin-bottom:28px}
+  .reuse-graph-card{background:var(--ink-2);border:2px solid rgba(233,179,59,.4);border-radius:var(--radius);padding:20px 20px 12px}
+  .reuse-svg{width:100%;height:auto;display:block}
+  .reuse-sq{fill:var(--muted);stroke:none;cursor:pointer;transition:fill .15s,transform .15s;transform-box:fill-box;transform-origin:center}
+  .reuse-sq.reused{fill:var(--gold)}
+  .reuse-sq:hover,.reuse-sq:focus,.reuse-sq.hl{fill:#FFD873;transform:scale(1.35);outline:none}
+  .reuse-sq.new:hover,.reuse-sq.new:focus,.reuse-sq.new.hl{fill:var(--cream-2)}
+  .reuse-line{stroke:rgba(233,179,59,.28);stroke-width:1.5;transition:stroke .15s,stroke-width .15s}
+  .reuse-line.hl{stroke:#FFD873;stroke-width:2.5}
+  .reuse-col-label{fill:var(--muted-l);font-size:12px;font-family:'Manrope',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .reuse-caption-live{min-height:20px;margin-top:10px;font-size:.85rem;color:var(--gold);font-weight:700}
+  .reuse-caption{color:#C9C4BA;font-size:.85rem;margin-top:16px;max-width:640px}
+  .reuse-caption a{color:var(--gold)}
 </style>
 </head>
 <body class="section-dark">
@@ -47,33 +96,148 @@
   <h1 class="display sec-title">What's Coming</h1>
   <p class="sec-sub" style="max-width:600px;margin:0 auto">Sequenced, phased, and updated as things ship. Each item stays here until you can click it.</p>
 
-  <div class="queue">
-    <div class="q-item"><div class="ph">NOW</div><div class="card-dark">
-      <div class="when">In progress</div>
-      <h3>This site — permanent home, daily writing</h3>
-      <p>Portfolio, projects, RAG demos, and articles on my own domain. Blog cadence: near-daily engineering posts. Every shipped system gets a build log.</p>
-    </div></div>
-    <div class="q-item"><div class="ph">01</div><div class="card-dark">
-      <div class="when">Next up</div>
-      <h3>review-rails v1 → GitHub Marketplace</h3>
-      <p>Tagged release, marketplace listing, dogfooded on my own repositories. PR review automation your standards can actually enforce.</p>
-    </div></div>
-    <div class="q-item"><div class="ph">02</div><div class="card-dark">
-      <div class="when shipped">Shipped</div>
-      <h3>How to Talk Corporate — live at a URL</h3>
-      <p>The message-rewriter is live: 10 free rewrites a day, no login, PII stripped before it ever reaches a model. Next: browser extension packaging.</p>
-    </div></div>
-    <div class="q-item"><div class="ph">03</div><div class="card-dark">
-      <div class="when">Queued · multi-week</div>
-      <h3>ClauseLens to production spec</h3>
-      <p>Real embedding model, Postgres + pgvector, hosted rate-limited demo embedded on this site. The blueprint is written; now it gets executed phase by phase.</p>
-    </div></div>
-    <div class="q-item"><div class="ph">04</div><div class="card-dark">
-      <div class="when">Blueprint stage</div>
-      <h3>AuditLoom → LedgerScope → BidForge → AuthPilot</h3>
-      <p>Four more vertical RAG systems, fully blueprinted (architecture, costs, go-to-market). Sequenced so each build reuses ~60% of the previous one. Details on the <a href="/systems/" style="color:var(--gold)">systems page</a>.</p>
-    </div></div>
+  <div class="rewind">
+    <span class="rewind-label">Rewind this page</span>
+    <input type="range" min="0" max="0" value="0" aria-label="Rewind roadmap to a past snapshot">
+    <div class="rewind-ticks"></div>
+    <p class="rewind-banner" hidden></p>
   </div>
+
+  <div class="queue" id="plans-queue"></div>
+
+  <noscript>
+    <div class="queue">
+      <div class="q-item"><div class="ph">NOW</div><div class="card-dark">
+        <div class="when">In progress</div>
+        <h3>This site — permanent home, daily writing</h3>
+        <p>Portfolio, projects, RAG demos, and articles on my own domain. Blog cadence: near-daily engineering posts. Every shipped system gets a build log.</p>
+      </div></div>
+      <div class="q-item"><div class="ph">01</div><div class="card-dark">
+        <div class="when">Next up</div>
+        <h3>review-rails v1 → GitHub Marketplace</h3>
+        <p>Tagged release, marketplace listing, dogfooded on my own repositories. PR review automation your standards can actually enforce.</p>
+      </div></div>
+      <div class="q-item"><div class="ph">02</div><div class="card-dark">
+        <div class="when shipped">Shipped</div>
+        <h3>How to Talk Corporate — live at a URL</h3>
+        <p>The message-rewriter is live: 10 free rewrites a day, no login, PII stripped before it ever reaches a model. Next: browser extension packaging.</p>
+      </div></div>
+      <div class="q-item"><div class="ph">03</div><div class="card-dark">
+        <div class="when">Queued · multi-week</div>
+        <h3>ClauseLens to production spec</h3>
+        <p>Real embedding model, Postgres + pgvector, hosted rate-limited demo embedded on this site. The blueprint is written; now it gets executed phase by phase.</p>
+      </div></div>
+      <div class="q-item"><div class="ph">04</div><div class="card-dark">
+        <div class="when">Blueprint stage</div>
+        <h3>AuditLoom → LedgerScope → BidForge → AuthPilot</h3>
+        <p>Four more vertical RAG systems, fully blueprinted (architecture, costs, go-to-market). Sequenced so each build reuses ~60% of the previous one. Details on the <a href="/systems/" style="color:var(--gold)">systems page</a>.</p>
+      </div></div>
+    </div>
+  </noscript>
+
+  <section class="reuse-section" id="reuse-graph" aria-labelledby="reuse-graph-h">
+    <h2 id="reuse-graph-h">Why this order — the 60% reuse graph</h2>
+    <p class="sub">Each system reuses ~60% of the previous one's components. Hover or tab through a component below to see where it repeats.</p>
+    <div class="reuse-graph-card">
+      <svg class="reuse-svg" viewBox="0 0 920 430" role="img" aria-label="Component reuse graph across five RAG systems" xmlns="http://www.w3.org/2000/svg">
+<g class="reuse-lines">
+<line class="reuse-line" data-ci="0" x1="70.0" y1="34.0" x2="265.0" y2="34.0"/>
+<line class="reuse-line" data-ci="0" x1="265.0" y1="34.0" x2="460.0" y2="34.0"/>
+<line class="reuse-line" data-ci="0" x1="460.0" y1="34.0" x2="655.0" y2="34.0"/>
+<line class="reuse-line" data-ci="0" x1="655.0" y1="34.0" x2="850.0" y2="34.0"/>
+<line class="reuse-line" data-ci="1" x1="70.0" y1="72.9" x2="265.0" y2="72.9"/>
+<line class="reuse-line" data-ci="1" x1="265.0" y1="72.9" x2="460.0" y2="72.9"/>
+<line class="reuse-line" data-ci="1" x1="460.0" y1="72.9" x2="655.0" y2="72.9"/>
+<line class="reuse-line" data-ci="1" x1="655.0" y1="72.9" x2="850.0" y2="72.9"/>
+<line class="reuse-line" data-ci="2" x1="70.0" y1="111.8" x2="265.0" y2="111.8"/>
+<line class="reuse-line" data-ci="2" x1="265.0" y1="111.8" x2="460.0" y2="111.8"/>
+<line class="reuse-line" data-ci="2" x1="460.0" y1="111.8" x2="655.0" y2="111.8"/>
+<line class="reuse-line" data-ci="2" x1="655.0" y1="111.8" x2="850.0" y2="111.8"/>
+<line class="reuse-line" data-ci="3" x1="70.0" y1="150.7" x2="265.0" y2="150.7"/>
+<line class="reuse-line" data-ci="3" x1="265.0" y1="150.7" x2="460.0" y2="150.7"/>
+<line class="reuse-line" data-ci="3" x1="460.0" y1="150.7" x2="655.0" y2="150.7"/>
+<line class="reuse-line" data-ci="3" x1="655.0" y1="150.7" x2="850.0" y2="150.7"/>
+<line class="reuse-line" data-ci="4" x1="70.0" y1="189.6" x2="265.0" y2="189.6"/>
+<line class="reuse-line" data-ci="4" x1="265.0" y1="189.6" x2="460.0" y2="189.6"/>
+<line class="reuse-line" data-ci="4" x1="460.0" y1="189.6" x2="655.0" y2="189.6"/>
+<line class="reuse-line" data-ci="4" x1="655.0" y1="189.6" x2="850.0" y2="189.6"/>
+<line class="reuse-line" data-ci="5" x1="70.0" y1="228.4" x2="265.0" y2="228.4"/>
+<line class="reuse-line" data-ci="5" x1="265.0" y1="228.4" x2="460.0" y2="228.4"/>
+<line class="reuse-line" data-ci="5" x1="460.0" y1="228.4" x2="655.0" y2="228.4"/>
+<line class="reuse-line" data-ci="5" x1="655.0" y1="228.4" x2="850.0" y2="228.4"/>
+</g>
+<g class="reuse-col-labels">
+<text class="reuse-col-label" x="70.0" y="20.0" text-anchor="middle">ClauseLens</text>
+<text class="reuse-col-label" x="265.0" y="20.0" text-anchor="middle">AuditLoom</text>
+<text class="reuse-col-label" x="460.0" y="20.0" text-anchor="middle">LedgerScope</text>
+<text class="reuse-col-label" x="655.0" y="20.0" text-anchor="middle">BidForge</text>
+<text class="reuse-col-label" x="850.0" y="20.0" text-anchor="middle">AuthPilot</text>
+</g>
+<g class="reuse-col" data-system="ClauseLens">
+<rect class="reuse-sq reused" data-ci="0" data-component="ingestion" data-reused="true" tabindex="0" role="button" aria-label="ingestion, ClauseLens, reused component" x="62.0" y="26.0" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="1" data-component="chunking" data-reused="true" tabindex="0" role="button" aria-label="chunking, ClauseLens, reused component" x="62.0" y="64.9" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="2" data-component="embedding" data-reused="true" tabindex="0" role="button" aria-label="embedding, ClauseLens, reused component" x="62.0" y="103.8" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="3" data-component="vector-store" data-reused="true" tabindex="0" role="button" aria-label="vector-store, ClauseLens, reused component" x="62.0" y="142.7" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="4" data-component="retrieval" data-reused="true" tabindex="0" role="button" aria-label="retrieval, ClauseLens, reused component" x="62.0" y="181.6" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="5" data-component="reranking" data-reused="true" tabindex="0" role="button" aria-label="reranking, ClauseLens, reused component" x="62.0" y="220.4" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="6" data-component="prompt-assembly" data-reused="false" tabindex="0" role="button" aria-label="prompt-assembly, ClauseLens, new component" x="62.0" y="259.3" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="7" data-component="eval-harness" data-reused="false" tabindex="0" role="button" aria-label="eval-harness, ClauseLens, new component" x="62.0" y="298.2" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="8" data-component="api-layer" data-reused="false" tabindex="0" role="button" aria-label="api-layer, ClauseLens, new component" x="62.0" y="337.1" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="9" data-component="ui" data-reused="false" tabindex="0" role="button" aria-label="ui, ClauseLens, new component" x="62.0" y="376.0" width="16" height="16" rx="4"/>
+</g>
+<g class="reuse-col" data-system="AuditLoom">
+<rect class="reuse-sq reused" data-ci="0" data-component="ingestion" data-reused="true" tabindex="0" role="button" aria-label="ingestion, AuditLoom, reused component" x="257.0" y="26.0" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="1" data-component="chunking" data-reused="true" tabindex="0" role="button" aria-label="chunking, AuditLoom, reused component" x="257.0" y="64.9" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="2" data-component="embedding" data-reused="true" tabindex="0" role="button" aria-label="embedding, AuditLoom, reused component" x="257.0" y="103.8" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="3" data-component="vector-store" data-reused="true" tabindex="0" role="button" aria-label="vector-store, AuditLoom, reused component" x="257.0" y="142.7" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="4" data-component="retrieval" data-reused="true" tabindex="0" role="button" aria-label="retrieval, AuditLoom, reused component" x="257.0" y="181.6" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="5" data-component="reranking" data-reused="true" tabindex="0" role="button" aria-label="reranking, AuditLoom, reused component" x="257.0" y="220.4" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="6" data-component="prompt-assembly" data-reused="false" tabindex="0" role="button" aria-label="prompt-assembly, AuditLoom, new component" x="257.0" y="259.3" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="7" data-component="eval-harness" data-reused="false" tabindex="0" role="button" aria-label="eval-harness, AuditLoom, new component" x="257.0" y="298.2" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="8" data-component="api-layer" data-reused="false" tabindex="0" role="button" aria-label="api-layer, AuditLoom, new component" x="257.0" y="337.1" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="9" data-component="ui" data-reused="false" tabindex="0" role="button" aria-label="ui, AuditLoom, new component" x="257.0" y="376.0" width="16" height="16" rx="4"/>
+</g>
+<g class="reuse-col" data-system="LedgerScope">
+<rect class="reuse-sq reused" data-ci="0" data-component="ingestion" data-reused="true" tabindex="0" role="button" aria-label="ingestion, LedgerScope, reused component" x="452.0" y="26.0" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="1" data-component="chunking" data-reused="true" tabindex="0" role="button" aria-label="chunking, LedgerScope, reused component" x="452.0" y="64.9" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="2" data-component="embedding" data-reused="true" tabindex="0" role="button" aria-label="embedding, LedgerScope, reused component" x="452.0" y="103.8" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="3" data-component="vector-store" data-reused="true" tabindex="0" role="button" aria-label="vector-store, LedgerScope, reused component" x="452.0" y="142.7" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="4" data-component="retrieval" data-reused="true" tabindex="0" role="button" aria-label="retrieval, LedgerScope, reused component" x="452.0" y="181.6" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="5" data-component="reranking" data-reused="true" tabindex="0" role="button" aria-label="reranking, LedgerScope, reused component" x="452.0" y="220.4" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="6" data-component="prompt-assembly" data-reused="false" tabindex="0" role="button" aria-label="prompt-assembly, LedgerScope, new component" x="452.0" y="259.3" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="7" data-component="eval-harness" data-reused="false" tabindex="0" role="button" aria-label="eval-harness, LedgerScope, new component" x="452.0" y="298.2" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="8" data-component="api-layer" data-reused="false" tabindex="0" role="button" aria-label="api-layer, LedgerScope, new component" x="452.0" y="337.1" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="9" data-component="ui" data-reused="false" tabindex="0" role="button" aria-label="ui, LedgerScope, new component" x="452.0" y="376.0" width="16" height="16" rx="4"/>
+</g>
+<g class="reuse-col" data-system="BidForge">
+<rect class="reuse-sq reused" data-ci="0" data-component="ingestion" data-reused="true" tabindex="0" role="button" aria-label="ingestion, BidForge, reused component" x="647.0" y="26.0" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="1" data-component="chunking" data-reused="true" tabindex="0" role="button" aria-label="chunking, BidForge, reused component" x="647.0" y="64.9" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="2" data-component="embedding" data-reused="true" tabindex="0" role="button" aria-label="embedding, BidForge, reused component" x="647.0" y="103.8" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="3" data-component="vector-store" data-reused="true" tabindex="0" role="button" aria-label="vector-store, BidForge, reused component" x="647.0" y="142.7" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="4" data-component="retrieval" data-reused="true" tabindex="0" role="button" aria-label="retrieval, BidForge, reused component" x="647.0" y="181.6" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="5" data-component="reranking" data-reused="true" tabindex="0" role="button" aria-label="reranking, BidForge, reused component" x="647.0" y="220.4" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="6" data-component="prompt-assembly" data-reused="false" tabindex="0" role="button" aria-label="prompt-assembly, BidForge, new component" x="647.0" y="259.3" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="7" data-component="eval-harness" data-reused="false" tabindex="0" role="button" aria-label="eval-harness, BidForge, new component" x="647.0" y="298.2" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="8" data-component="api-layer" data-reused="false" tabindex="0" role="button" aria-label="api-layer, BidForge, new component" x="647.0" y="337.1" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="9" data-component="ui" data-reused="false" tabindex="0" role="button" aria-label="ui, BidForge, new component" x="647.0" y="376.0" width="16" height="16" rx="4"/>
+</g>
+<g class="reuse-col" data-system="AuthPilot">
+<rect class="reuse-sq reused" data-ci="0" data-component="ingestion" data-reused="true" tabindex="0" role="button" aria-label="ingestion, AuthPilot, reused component" x="842.0" y="26.0" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="1" data-component="chunking" data-reused="true" tabindex="0" role="button" aria-label="chunking, AuthPilot, reused component" x="842.0" y="64.9" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="2" data-component="embedding" data-reused="true" tabindex="0" role="button" aria-label="embedding, AuthPilot, reused component" x="842.0" y="103.8" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="3" data-component="vector-store" data-reused="true" tabindex="0" role="button" aria-label="vector-store, AuthPilot, reused component" x="842.0" y="142.7" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="4" data-component="retrieval" data-reused="true" tabindex="0" role="button" aria-label="retrieval, AuthPilot, reused component" x="842.0" y="181.6" width="16" height="16" rx="4"/>
+<rect class="reuse-sq reused" data-ci="5" data-component="reranking" data-reused="true" tabindex="0" role="button" aria-label="reranking, AuthPilot, reused component" x="842.0" y="220.4" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="6" data-component="prompt-assembly" data-reused="false" tabindex="0" role="button" aria-label="prompt-assembly, AuthPilot, new component" x="842.0" y="259.3" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="7" data-component="eval-harness" data-reused="false" tabindex="0" role="button" aria-label="eval-harness, AuthPilot, new component" x="842.0" y="298.2" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="8" data-component="api-layer" data-reused="false" tabindex="0" role="button" aria-label="api-layer, AuthPilot, new component" x="842.0" y="337.1" width="16" height="16" rx="4"/>
+<rect class="reuse-sq new" data-ci="9" data-component="ui" data-reused="false" tabindex="0" role="button" aria-label="ui, AuthPilot, new component" x="842.0" y="376.0" width="16" height="16" rx="4"/>
+</g>
+</svg>
+      <p class="reuse-caption-live" aria-live="polite"></p>
+    </div>
+    <p class="reuse-caption">Each system reuses ~60% of the previous one's components. That's the sequencing logic — every build gets cheaper. Details on the <a href="/systems/">systems page</a>.</p>
+  </section>
 
   <div class="principle">
     <div class="card-dark">
@@ -85,8 +249,10 @@
 
 <footer class="site-footer">
   <b>Muskan Agarwal</b>
-  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a></span>
+  <span><a href="/">Home</a> · <a href="/projects/">Projects</a> · <a href="/articles/">Articles</a> · <a href="/articles/feed.xml">RSS</a></span>
   <span><a href="mailto:hello@muskanagarwal.dev">Get in touch</a></span>
 </footer>
+<script src="/assets/plans.js" defer></script>
+<script src="/assets/plans-reuse-graph.js" defer></script>
 </body>
 </html>

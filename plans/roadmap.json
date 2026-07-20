@@ -1,0 +1,57 @@
+[
+  {
+    "id": "this-site",
+    "title": "This site — permanent home, daily writing",
+    "status": "now",
+    "whenLabel": "In progress",
+    "phaseLabel": "NOW",
+    "description": "Portfolio, projects, RAG demos, and articles on my own domain. Blog cadence: near-daily engineering posts. Every shipped system gets a build log.",
+    "order": 0,
+    "repo": "muskanagarwal.dev",
+    "lastActivity": "2026-07-18T11:46:31Z"
+  },
+  {
+    "id": "review-rails",
+    "title": "review-rails v1 → GitHub Marketplace",
+    "status": "next",
+    "whenLabel": "Next up",
+    "phaseLabel": "01",
+    "description": "Tagged release, marketplace listing, dogfooded on my own repositories. PR review automation your standards can actually enforce.",
+    "order": 1,
+    "repo": "review-rails",
+    "lastActivity": "2026-07-18T06:34:18Z"
+  },
+  {
+    "id": "how-to-talk-corporate",
+    "title": "How to Talk Corporate — live at a URL",
+    "status": "shipped",
+    "whenLabel": "Shipped",
+    "phaseLabel": "02",
+    "description": "The message-rewriter is live: 10 free rewrites a day, no login, PII stripped before it ever reaches a model. Next: browser extension packaging.",
+    "order": 2,
+    "repo": "professional-message-rewriter",
+    "lastActivity": "2026-07-18T06:25:19Z"
+  },
+  {
+    "id": "clauselens-production",
+    "title": "ClauseLens to production spec",
+    "status": "queued",
+    "whenLabel": "Queued · multi-week",
+    "phaseLabel": "03",
+    "description": "Real embedding model, Postgres + pgvector, hosted rate-limited demo embedded on this site. The blueprint is written; now it gets executed phase by phase.",
+    "order": 3,
+    "repo": null,
+    "lastActivity": "2026-07-15T18:03:44+05:30"
+  },
+  {
+    "id": "rag-blueprints",
+    "title": "AuditLoom → LedgerScope → BidForge → AuthPilot",
+    "status": "blueprint",
+    "whenLabel": "Blueprint stage",
+    "phaseLabel": "04",
+    "description": "Four more vertical RAG systems, fully blueprinted (architecture, costs, go-to-market). Sequenced so each build reuses ~60% of the previous one. Details on the <a href=\"/systems/\" style=\"color:var(--gold)\">systems page</a>.",
+    "order": 4,
+    "repo": null,
+    "lastActivity": "2026-07-15T18:03:44+05:30"
+  }
+]
